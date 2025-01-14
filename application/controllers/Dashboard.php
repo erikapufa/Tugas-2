@@ -54,7 +54,7 @@ class Dashboard extends CI_Controller
         // Validasi: username harus unik
         $exists = $this->User_model->getUserByUsername($username);
         if ($exists->num_rows() > 0) {
-            echo json_encode(['status' => false, 'message' => 'Username telaj digunakan']);
+            echo json_encode(['status' => false, 'message' => 'Username telah digunakan']);
             return;
         }
 
