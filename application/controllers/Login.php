@@ -31,7 +31,7 @@ class Login extends CI_Controller
             log_message('debug', 'Login sukses, session user_id diset: ' . $user->id);
 
             // Arahkan ke halaman dashboard
-            redirect('dashboard');
+            redirect('Admin');
         } else {
             log_message('debug', 'Login gagal, username atau password salah');
             $this->session->set_flashdata('error', 'Username atau password salah');
