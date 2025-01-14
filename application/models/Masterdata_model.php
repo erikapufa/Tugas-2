@@ -8,6 +8,10 @@ class Masterdata_model extends CI_Model
     protected $tableKelas = 'data_kelas';
     protected $tableJurusan = 'data_jurusan';
 
+    protected $tableSeragam = 'data_seragam';
+    protected $tableBiaya = 'data_biaya';
+
+
     public function __construct()
     {
         parent::__construct();
@@ -174,6 +178,14 @@ class Masterdata_model extends CI_Model
         $this->db->delete($this->tableKelas);
         return $this->db->affected_rows();
     }
+
+    public function getAllBiaya()
+    {
+        return $this->db->get($this->tableBiaya);
+    }
 }
+
+
+
 
 /* End of file: Masterdata_model.php */
