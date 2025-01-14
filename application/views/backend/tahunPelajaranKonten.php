@@ -77,7 +77,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary saveBtn">Simpan</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary btnKeluar" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -134,6 +134,7 @@
         // lakukan proses delete data, lalu reload tabel
     })
     $('.btnKeluar').click(function() {
+        $('#modalTahunPelajaran').modal('hide');
         // lakukan proses delete data, lalu reload tabel
     })
 </script>

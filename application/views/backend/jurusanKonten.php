@@ -33,8 +33,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Jurusan</h5>
-
-                <button type="button" class="close " data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -42,10 +41,14 @@
                 <div class="form-user">
                     <form action="#" method="post" enctype="multipart/form-data">
                         <input type="hidden" class="form-control" id="id" name="id" value="">
-
                         <div class="mb-1">
-                            <label for="nama_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
-                            <input type="text" class="form-control" id="nama_tahun_pelajaran" name="nama_tahun_pelajaran" value="">
+                            <label for="id_tahun_ajaran" class="form-label">Tahun Ajaran</label>
+                            <select class="form-control" id="id_tahun_ajaran" name="id_tahun_ajaran"></select>
+                            <div class="error-block"></div>
+                        </div>
+                        <div class="mb-1">
+                            <label for="nama_jurusan" class="form-label">Nama Jurusan</label>
+                            <input type="text" class="form-control" id="nama_jurusan" name="nama_jurusan" value="">
                             <div class="error-block"></div>
                         </div>
                         <div class="mb-1">
@@ -66,57 +69,47 @@
                             </select>
                             <div class="error-block"></div>
                         </div>
-
-
                     </form>
-
-                    <div>
-
-                    </div>
-
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary saveBtn">Simpan</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary closeBtn" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <script>
     $(document).ready(function() {
         tabelJurusan();
-    })
+    });
 
     function tabelJurusan() {
-        let tabelKelas = $('#tabelKelas');
+        let tabelJurusan = $('#tabelJurusan');
         let tr = $('<tr>');
         $.ajax({
-            url: '<?php echo base_url('kelas/table_jurusan'); ?>',
+            url: '<?php echo base_url('jurusan/table_jurusan'); ?>',
             type: 'GET',
-
             dataType: 'json',
             success: function(response) {
                 if (response.status) {
-                    tabelKelas.find('tbody').html('');
+                    tabelJurusan.find('tbody').html('');
                     let no = 1;
                     $.each(response.data, function(i, item) {
-
                         tr.append('<td>' + no++ + '</td>');
-                        tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
+                        tr.append('<td>' + item.id_tahun_ajaran + '</td>');
+                        tr.append('<td>' + item.nama_jurusan + '</td>');
                         tr.append('<td>' + item.tanggal_mulai + '</td>');
                         tr.append('<td>' + item.tanggal_akhir + '</td>');
                         tr.append('<td>' + item.status_tahun_pelajaran + '</td>');
-                        tr.append('<td>	<button class="btn btn-primary" onclick="editKelas(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteKelas(' + item.id + ')">Delete</button></td>');
-                        tabelTahunPelajaran.find('tbody').append(tr);
+                        tr.append('<td><button class="btn btn-primary" onclick="editJurusan(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteJurusan(' + item.id + ')">Delete</button></td>');
+                        tabelJurusan.find('tbody').append(tr);
                     });
-
                 } else {
-                    tabelKelas.find('tbody').html('');
-                    tr.append('<td colspan="4">' + response.message + '</td>');
+                    tabelJurusan.find('tbody').html('');
+                    tr.append('<td colspan="7">' + response.message + '</td>');
+                    tabelJurusan.find('tbody').append(tr);
                 }
             }
         });
@@ -125,13 +118,20 @@
     $('.btnJurusan').click(function() {
         $('#modalJurusan').modal('show');
     });
+
     $('.saveBtn').click(function() {
-        // lakukan proses simpan data, lalu tutup modal , lalu reload tabel
-    })
-    $('.editBtn').click(function() {
-        // tampilkan data dalam modal 
-    })
-    $('.deleteBtn').click(function() {
-        // lakukan proses delete data, lalu reload tabel
-    })
+        // Simpan data, lalu tutup modal, lalu reload tabel
+    });
+
+    $('.closeBtn').click(function() {
+        $('#modalJurusan').modal('hide');
+    });
+
+    function editJurusan(id) {
+        // Tampilkan data untuk diedit
+    }
+
+    function deleteJurusan(id) {
+        // Hapus data, lalu reload tabel
+    }
 </script>

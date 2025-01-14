@@ -24,94 +24,92 @@
                 </div>
             </div>
         </div>
-        <div class="btn btn-danger btnKeluar mb-2 ml-4">Logout</div>
     </div>
 </div>
 
-<div class="modal" id="modalKelas" tabindex=" -1" role="dialog">
+<div class="modal" id="modalKelas" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Kelas</h5>
-
-                <button type="button" class="close " data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-user">
-                    <form action="#" method="post" enctype="multipart/form-data">
-                        <input type="hidden" class="form-control" id="id" name="id" value="">
-
-                        <div class="mb-1">
-                            <label for="nama_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
-                            <input type="text" class="form-control" id="nama_tahun_pelajaran" name="nama_tahun_pelajaran" value="">
-                            <div class="error-block"></div>
-                        </div>
-                        <div class="mb-1">
-                            <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
-                            <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" value="">
-                            <div class="error-block"></div>
-                        </div>
-                        <div class="mb-1">
-                            <label for="tanggal_akhir" class="form-label">Tanggal Akhir</label>
-                            <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="">
-                            <div class="error-block"></div>
-                        </div>
-                        <div class="mb-1">
-                            <label for="status_tahun_pelajaran" class="form-label">Status</label>
-                            <select class="form-control" id="status_tahun_pelajaran" name="status_tahun_pelajaran">
-                                <option value="1">Aktif</option>
-                                <option value="0">Tidak Aktif</option>
-                            </select>
-                            <div class="error-block"></div>
-                        </div>
-                    </form>
-                    <div>
+                <form action="#" method="post" enctype="multipart/form-data">
+                    <input type="hidden" class="form-control" id="id" name="id" value="">
+                    <div class="mb-1">
+                        <label for="status_tahun_pelajaran" class="form-label">Tahun Ajaran</label>
+                        <select class="form-control" id="status_tahun_pelajaran" name="status_tahun_pelajaran">
+                        </select>
                     </div>
-                </div>
+                    <div class="mb-1">
+                        <label for="id_jurusan" class="form-label">Jurusan</label>
+                        <select class="form-control" id="id_jurusan" name="jurusan">
+                        </select>
+                    </div>
+                    <div class="mb-1">
+                        <label for="nama_kelas" class="form-label">Kelas</label>
+                        <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" value="">
+                    </div>
+                    <div class="mb-1">
+                        <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" value="">
+                    </div>
+                    <div class="mb-1">
+                        <label for="tanggal_akhir" class="form-label">Tanggal Akhir</label>
+                        <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="">
+                    </div>
+                    <div class="mb-1">
+                        <label for="status_kelas" class="form-label">Status</label>
+                        <select class="form-control" id="status_kelas" name="status_kelas">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary saveBtn">Simpan</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary btnKeluarKelas" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <script>
     $(document).ready(function() {
         tabelKelas();
-    })
+    });
 
     function tabelKelas() {
         let tabelKelas = $('#tabelKelas');
-        let tr = $('<tr>');
         $.ajax({
             url: '<?php echo base_url('kelas/table_kelas'); ?>',
             type: 'GET',
-
             dataType: 'json',
             success: function(response) {
+                tabelKelas.find('tbody').empty(); // Reset tabel sebelum mengisi
                 if (response.status) {
-                    tabelKelas.find('tbody').html('');
                     let no = 1;
                     $.each(response.data, function(i, item) {
-
-                        tr.append('<td>' + no++ + '</td>');
-                        tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-                        tr.append('<td>' + item.tanggal_mulai + '</td>');
-                        tr.append('<td>' + item.tanggal_akhir + '</td>');
-                        tr.append('<td>' + item.status_tahun_pelajaran + '</td>');
-                        tr.append('<td>	<button class="btn btn-primary" onclick="editKelas(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteKelas(' + item.id + ')">Delete</button></td>');
-                        tabelTahunPelajaran.find('tbody').append(tr);
+                        let row = `
+                            <tr>
+                                <td>${no++}</td>
+                                <td>${item.nama_tahun_pelajaran}</td>
+                                <td>${item.tanggal_mulai}</td>
+                                <td>${item.tanggal_akhir}</td>
+                                <td>${item.status_tahun_pelajaran}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="editKelas(${item.id})">Edit</button>
+                                    <button class="btn btn-danger" onclick="deleteKelas(${item.id})">Delete</button>
+                                </td>
+                            </tr>`;
+                        tabelKelas.find('tbody').append(row);
                     });
-
                 } else {
-                    tabelKelas.find('tbody').html('');
-                    tr.append('<td colspan="4">' + response.message + '</td>');
+                    tabelKelas.find('tbody').html('<tr><td colspan="6">Tidak ada data tersedia.</td></tr>');
                 }
             }
         });
@@ -120,13 +118,8 @@
     $('.btnKelas').click(function() {
         $('#modalKelas').modal('show');
     });
-    $('.saveBtn').click(function() {
-        // lakukan proses simpan data, lalu tutup modal , lalu reload tabel
-    })
-    $('.editBtn').click(function() {
-        // tampilkan data dalam modal 
-    })
-    $('.deleteBtn').click(function() {
-        // lakukan proses delete data, lalu reload tabel
-    })
+
+    $('.btnKeluarKelas').click(function() {
+        $('#modalKelas').modal('hide');
+    });
 </script>
