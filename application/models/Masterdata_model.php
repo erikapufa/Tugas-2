@@ -27,10 +27,10 @@ class Masterdata_model extends CI_Model
         return  $this->db->get($this->tableJurusan);
     }
 
-    public function getByTahunPelajaran($id_tahun_pelajaran)
-    {
-        return $this->db->get_where('jurusan', ['tahun_pelajaran_id' => $tahun_pelajaran_id])->result();
-    }
+    // public function getByTahunPelajaran($id_tahun_pelajaran)
+    // {
+    //     return $this->db->get_where('jurusan', ['tahun_pelajaran_id' => $tahun_pelajaran_id])->result();
+    // }
     # code...
 }
 

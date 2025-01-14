@@ -42,6 +42,32 @@ class Tahun_pelajaran extends CI_Controller
 
         echo json_encode($ret);
     }
+    public function edit()
+    {
+
+        $id = $this->input->post('id');
+        $q = $this->Masterdata_Model->getTahunPelajaranByID($id);
+
+
+
+        if ($q->num_rows() > 0) {
+            $ret = array(
+                'status' => true,
+                'data' => $q->row(),
+                'message' => ''
+            );
+        } else {
+            $ret = array(
+                'status' => false,
+                'data' => [],
+                'message' => 'Data tidak ditemukan',
+                'query' => $this->db->last_query()
+            );
+        }
+
+        echo json_encode($ret);
+    }
+
 }
 
 /* End of file: Tahun_pelajaran.php */

@@ -109,7 +109,7 @@
                         tr.append('<td>' + item.tanggal_mulai + '</td>');
                         tr.append('<td>' + item.tanggal_akhir + '</td>');
                         tr.append('<td>' + item.status_tahun_pelajaran + '</td>');
-                        tr.append('<td>	<button class="btn btn-primary" onclick="editTahunPelajaran(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteTahunPelajarar(' + item.id + ')">Delete</button></td>');
+                        tr.append('<td>	<button class="btn btn-primary editBtn" onclick="editTahunPelajaran(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteTahunPelajarar(' + item.id + ')">Delete</button></td>');
                         tabelTahunPelajaran.find('tbody').append(tr);
                     });
 
@@ -128,8 +128,30 @@
         // lakukan proses simpan data, lalu tutup modal , lalu reload tabel
     })
     $('.editBtn').click(function() {
-        // tampilkan data dalam modal 
+        $.ajax({
+            url: '<?php echo base_url('tahun_pelajaran/edit'); ?>',
+            type: 'POST',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status) {
+                    // Isi modal dengan data yang didapat dari server
+                    $('#modalTahunPelajaran').modal('show');
+                    $('#namaTahunPelajaran').val(response.data.nama_tahun_pelajaran);
+                    $('#tanggalMulai').val(response.data.tanggal_mulai);
+                    $('#tanggalAkhir').val(response.data.tanggal_akhir);
+                    $('#statusTahunPelajaran').val(response.data.status_tahun_pelajaran);
+                    $('#idTahunPelajaran').val(response.data.id);
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
     })
+    // tampilkan data dalam modal 
+    
     $('.deleteBtn').click(function() {
         // lakukan proses delete data, lalu reload tabel
     })
