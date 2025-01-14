@@ -24,6 +24,7 @@
                 </div>
             </div>
         </div>
+        <div class="btn btn-danger btnKeluar mb-2 ml-4">Logout</div>
     </div>
 </div>
 
@@ -65,14 +66,9 @@
                             </select>
                             <div class="error-block"></div>
                         </div>
-
-
                     </form>
-
                     <div>
-
                     </div>
-
                 </div>
             </div>
             <div class="modal-footer">
