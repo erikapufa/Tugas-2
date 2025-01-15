@@ -16,6 +16,7 @@
             </ul>
         </div>
         <div class="card-body">
+            <div class="btn btn-primary btnTambah mb-2"> <i class="fas fa-plus"></i> Tambah</div>
             <div class="tab-content" id="custom-tabs-one-tabContent">
                 <!-- Jenis Biaya -->
                 <div class="tab-pane fade show active" id="jenis" role="tabpanel" aria-labelledby="tab-jenis">
