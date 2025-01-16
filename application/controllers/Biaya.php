@@ -189,7 +189,6 @@ class biaya extends CI_Controller
 
     public function saveHarga()
     {
-
         $id = $this->input->post('id');
         $data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
         $data['id_kelas'] = $this->input->post('id_kelas');
@@ -197,51 +196,59 @@ class biaya extends CI_Controller
         $data['harga'] = $this->input->post('harga');
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['updated_at'] = date('Y-m-d H:i:s');
-        $data['deleted_at'] = 0;
+        $data['deleted_at'] = null; // Set deleted_at ke null jika tidak digunakan
 
-        if ($data['harga']) {
-            $cek = $this->md->cekHargaDuplicate($data['id_jenis_biaya'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $id);
-            if ($cek->num_rows() > 0) {
-                $ret['status'] = false;
-                $ret['message'] = 'Data terduplikasi';
-                $ret['query'] = $this->db->last_query();
+        // Validasi input
+        if (empty($data['id_tahun_pelajaran']) || empty($data['id_kelas']) || empty($data['id_jenis_biaya']) || empty($data['harga'])) {
+            $ret['status'] = false;
+            $ret['message'] = 'Semua data harus diisi';
+            echo json_encode($ret);
+            return;
+        }
+
+        // Cek duplikasi
+        $cek = $this->md->cekHargaDuplicate($data['id_jenis_biaya'], $data['id_tahun_pelajaran'], $data['id_kelas'], $id);
+        if ($cek->num_rows() > 0) {
+            $ret['status'] = false;
+            $ret['message'] = 'Data terduplikasi';
+            echo json_encode($ret);
+            return;
+        }
+
+        // Insert atau update
+        if ($id) {
+            $update = $this->md->updateHarga($id, $data);
+            if ($update) {
+                $ret = array(
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate'
+                );
             } else {
-                if ($id) {
-                    $update = $this->md->updateHarga($id, $data);
-                    if ($update) {
-                        $ret = array(
-                            'status' => true,
-                            'message' => 'Data berhasil diupdate'
-                        );
-                    } else {
-                        $ret = array(
-                            'status' => false,
-                            'message' => 'Data gagal diupdate'
-                        );
-                    }
-                } else {
-                    $insert = $this->md->insertHarga($data);
-
-                    if ($insert) {
-                        $ret = array(
-                            'status' => true,
-                            'message' => 'Data berhasil disimpan'
-                        );
-                    } else {
-                        $ret = array(
-                            'status' => false,
-                            'message' => 'Data gagal disimpan'
-                        );
-                    }
-                }
+                $ret = array(
+                    'status' => false,
+                    'message' => 'Data gagal diupdate',
+                    'error' => $this->db->error() // Tambahkan error detail
+                );
             }
         } else {
-            $ret['status'] = false;
-            $ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
+            $insert = $this->md->insertHarga($data);
+            if ($insert) {
+                $ret = array(
+                    'status' => true,
+                    'message' => 'Data berhasil disimpan'
+                );
+            } else {
+                $ret = array(
+                    'status' => false,
+                    'message' => 'Data gagal disimpan',
+                    'error' => $this->db->error() // Tambahkan error detail
+                );
+            }
         }
+
         echo json_encode($ret);
     }
+
 
     public function editHarga()
     {

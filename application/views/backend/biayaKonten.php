@@ -278,12 +278,11 @@
     })
 
     function tabelHarga() {
-        let tabelHarga = $('#tabelHargaBiaya');
+        let tabel = $('#tabelHargaBiaya');
         let tr = '';
         $.ajax({
             url: '<?php echo base_url('biaya/table_harga'); ?>',
             type: 'GET',
-
             dataType: 'json',
             success: function(response) {
                 if (response.status) {
@@ -291,20 +290,16 @@
                     let no = 1;
                     $.each(response.data, function(i, item) {
                         tr = $('<tr>');
-
                         tr.append('<td>' + no++ + '</td>');
                         tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
                         tr.append('<td>' + item.nama_kelas + '</td>');
                         tr.append('<td>' + item.jenis_biaya + '</td>');
                         tr.append('<td>' + item.nama_harga + '</td>');
-                        tr.append('<td>	<button class="btn btn-primary" onclick="editKelas(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteKelas(' + item.id + ')">Delete</button></td>');
+                        tr.append('<td><button class="btn btn-primary" onclick="editHarga(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteHarga(' + item.id + ')">Delete</button></td>');
                         tabel.find('tbody').append(tr);
                     });
-
                 } else {
-                    tr = $('<tr>');
-                    tabelHarga.find('tbody').html('');
-                    tr.append('<td colspan="4">' + response.message + '</td>');
+                    tabel.find('tbody').html('<tr><td colspan="6">' + response.message + '</td></tr>');
                 }
             }
         });
@@ -394,20 +389,6 @@
         });
 
     }
-
-//     $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
-//     $('#id_tahun_pelajaran').change(function() {
-//         let id = $(this).val(); // id tahun pelajaran
-//         let url = '<?php echo base_url('biaya/option_kelas'); ?>';
-//         $('#id_kelas').load(url + '/' + id);
-
-//     })
-//     // $('#id_jurusan').change(function() {
-//     //     let id = $(this).val();
-//     //     let url = '<?php echo base_url('biaya/option_kelas'); ?>';
-//     //     $('#id_kelas').load(url + '/' + id);
-//     // })
-//     $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
- </script>
+</script>
 
 </div>
