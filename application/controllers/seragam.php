@@ -189,7 +189,7 @@ class Seragam extends CI_Controller
     public function option_kelas($id)
     {
 
-        $q = $this->md->getKelasByID($id);
+        $q = $this->md->getKelasByJurusanID($id);
         $ret = '<option value="">Pilih Kelas</option>';
         if ($q->num_rows() > 0) {
             foreach ($q->result() as $row) {
@@ -226,7 +226,8 @@ class Seragam extends CI_Controller
         $data['deleted_at'] = 0;
 
         if ($data['stok']) {
-            $cek = $this->md->cekHargaBiayaDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['ukuran'], $data['ukuran'], $id);
+            $cek = $this->md->cekStokDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $data['ukuran'], $id);
+
             if ($cek->num_rows() > 0) {
                 $ret['status'] = false;
                 $ret['message'] = 'Data terduplikasi';

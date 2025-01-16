@@ -7,11 +7,12 @@ class Masterdata_model extends CI_Model
     protected $tableTahunPelajaran = 'data_tahun_pelajaran';
     protected $tableKelas = 'data_kelas';
     protected $tableJurusan = 'data_jurusan';
-    protected $tableSeragam = 'data_seragam';
     protected $tableBiaya = 'data_biaya';
-    protected $tableHarga = 'data_harga';
+    protected $tableHargaBiaya = 'data_harga_biaya';
+    protected $tableSeragam = 'data_seragam';
     protected $tableStok = 'data_stok';
 
+    protected $table = 'user';
 
     public function __construct()
     {
@@ -21,13 +22,13 @@ class Masterdata_model extends CI_Model
 
     public function getAllTahunPelajaran()
     {
-        return $this->db->get($this->tableTahunPelajaran);
+        return  $this->db->get($this->tableTahunPelajaran);
     }
 
     public function getAllTahunPelajaranNotDeleted()
     {
         $this->db->where('deleted_at', 0);
-        return $this->db->get($this->tableTahunPelajaran);
+        return  $this->db->get($this->tableTahunPelajaran);
     }
     public function getTahunPelajaranByName($nama_tahun_pelajaran)
     {
@@ -50,7 +51,7 @@ class Masterdata_model extends CI_Model
         return $this->db->get($this->tableTahunPelajaran);
     }
 
-    public function saveTahunPelajaran($data)
+    public function  saveTahunPelajaran($data)
     {
         $this->db->insert($this->tableTahunPelajaran, $data);
         return $this->db->insert_id();
@@ -125,8 +126,6 @@ class Masterdata_model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    # code...
-
     public function getAllKelas()
     {
         return $this->db->get($this->tableKelas);
@@ -150,7 +149,7 @@ class Masterdata_model extends CI_Model
         return $this->db->get($this->tableKelas);
     }
 
-    public function cekKelasDuplicate($nama_kelas, $id_jurusan, $id)
+    public function cekKelasDuplicate($nama_kelas,  $id_jurusan, $id)
     {
         if ($id) {
             $this->db->where('id !=', $id);
@@ -179,46 +178,27 @@ class Masterdata_model extends CI_Model
         $this->db->delete($this->tableKelas);
         return $this->db->affected_rows();
     }
-
-
-
-    // DATA BIAYA
-    public function getAllBiaya()
-    {
-        return $this->db->get($this->tableBiaya);
-    }
-
+    // Data Biaya
     public function getAllBiayaNotDeleted()
     {
         $this->db->where('deleted_at', 0);
-        return $this->db->get($this->tableBiaya);
+        return  $this->db->get($this->tableBiaya);
     }
-    public function getBiayaByName($jenis_biaya)
+
+    public function cekBiayaDuplicate($nama_biaya, $id)
     {
-        $this->db->where('jenis_biaya', $jenis_biaya);
+        if ($id) {
+            $this->db->where('id !=', $id);
+        }
+        $this->db->where('nama_biaya', $nama_biaya);
         return $this->db->get($this->tableBiaya);
     }
 
     public function getBiayaByID($id)
     {
-        $this->db->where('id', $id);
-        return $this->db->get($this->tableBiaya);
+        return $this->db->where('id', $id)->get($this->tableBiaya);
     }
 
-    public function cekBiayaDuplicate($jenis_biaya, $id)
-    {
-        if ($id) {
-            $this->db->where('id !=', $id);
-        }
-        $this->db->where('jenis_biaya', $jenis_biaya);
-        return $this->db->get($this->tableBiaya);
-    }
-
-    public function saveBiaya($data)
-    {
-        $this->db->insert($this->tableBiaya, $data);
-        return $this->db->insert_id();
-    }
     public function updateBiaya($id, $data)
     {
         $this->db->where('id', $id);
@@ -226,61 +206,83 @@ class Masterdata_model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    public function deleteBiaya($id)
+    public function insertBiaya($data)
+    {
+        $this->db->insert($this->tableBiaya, $data);
+        return $this->db->insert_id();
+    }
+
+    public function deleteBiaya($id = null)
     {
         $this->db->where('id', $id);
         $this->db->delete($this->tableBiaya);
         return $this->db->affected_rows();
     }
 
-
-    // Kelas
-    public function getAllHarga()
+    // data harga biaya
+    public function getAllHargaBiayaNotDeleted()
     {
-        return $this->db->get($this->tableHarga);
-    }
-    public function getAllHargaNotDeleted()
-    {
-        $this->db->select($this->tableHarga . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableKelas . '.nama_kelas, ' . $this->tableBiaya . '.jenis_biaya');
-        $this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHarga . '.id_kelas');
-        $this->db->join($this->tableBiaya, $this->tableBiaya . '.id = ' . $this->tableHarga . '.id_jenis_biaya');
-        $this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableKelas . '.id_tahun_pelajaran');
-        $this->db->where($this->tableHarga . '.deleted_at', 0); // Konsistensi deleted_at di tableHarga
-        return $this->db->get($this->tableHarga);
+        $this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableBiaya . '.nama_biaya,');
+        $this->db->join($this->tableBiaya, $this->tableBiaya . '.id = ' . $this->tableHargaBiaya . '.id_biaya');
+        $this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHargaBiaya . '.id_kelas');
+        $this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
+        $this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+        $this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
+        return $this->db->get($this->tableHargaBiaya);
     }
 
-    public function getHargaByID($id)
+    public function cekHargaBiayaDuplicate($id_biaya, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $id)
     {
-        $this->db->select($this->tableHarga . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableKelas . '.nama_kelas, ' . $this->tableBiaya . '.jenis_biaya');
-        $this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHarga . '.id_kelas', 'left'); // Koreksi join
-        $this->db->join($this->tableBiaya, $this->tableBiaya . '.id = ' . $this->tableHarga . '.id_jenis_biaya', 'left'); // Tambahkan join jika perlu
-        $this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableKelas . '.id_tahun_pelajaran', 'left');
-        $this->db->where($this->tableHarga . '.deleted_at', 0); // Konsistensi deleted_at di tableHarga
-        $this->db->where($this->tableHarga . '.id', $id);
-        return $this->db->get($this->tableHarga);
+        if ($id) {
+            $this->db->where('id !=', $id);
+        }
+        $this->db->where('id_biaya', $id_biaya);
+        $this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
+        $this->db->where('id_jurusan', $id_jurusan);
+        $this->db->where('id_kelas', $id_kelas);
+        return $this->db->get($this->tableHargaBiaya);
     }
 
-    public function saveHarga($data)
+    public function getKelasByJurusanID($id)
     {
-        $this->db->insert($this->tableHarga, $data);
+        $this->db->where('id_Jurusan', $id);
+        return $this->db->get($this->tableKelas);
+    }
+
+    public function updateHargaBiaya($id, $data)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->tableHargaBiaya, $data);
+        return $this->db->affected_rows();
+    }
+
+    public function insertHargaBiaya($data)
+    {
+        $this->db->insert($this->tableHargaBiaya, $data);
         return $this->db->insert_id();
     }
 
-    public function updateHarga($id, $data)
+    public function getHargaBiayaByID($id)
+    {
+        $this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableBiaya . '.nama_biaya,');
+        $this->db->join($this->tableBiaya, $this->tableBiaya . '.id = ' . $this->tableHargaBiaya . '.id_biaya');
+        $this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHargaBiaya . '.id_kelas');
+        $this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
+        $this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+        $this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
+        $this->db->where($this->tableHargaBiaya . '.id', $id);
+        return $this->db->get($this->tableHargaBiaya);
+    }
+
+    public function deleteHargaBiaya($id = null)
     {
         $this->db->where('id', $id);
-        $this->db->update($this->tableHarga, $data);
+        $this->db->delete($this->tableHargaBiaya);
         return $this->db->affected_rows();
     }
 
-    public function deleteHarga($id)
-    {
-        $this->db->where('id', $id);
-        $this->db->delete($this->tableHarga);
-        return $this->db->affected_rows();
-    }
 
-    // seragam
+    // data seragam
     public function getAllSeragamNotDeleted()
     {
         $this->db->where('deleted_at', 0);
@@ -324,33 +326,25 @@ class Masterdata_model extends CI_Model
 
 
 
-    // stok
+    //data stok
 
     public function getAllStokNotDeleted()
     {
-        $this->db->select($this->tableStok . '.*, '
-            . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, '
-            . $this->tableJurusan . '.nama_jurusan, '
-            . $this->tableKelas . '.nama_kelas, '
-            . $this->tableSeragam . '.nama_seragam');
-
+        $this->db->select($this->tableStok . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableSeragam . '.nama_seragam,');
         $this->db->join($this->tableSeragam, $this->tableSeragam . '.id = ' . $this->tableStok . '.id_seragam');
         $this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableStok . '.id_kelas');
         $this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
         $this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
-
         $this->db->where($this->tableStok . '.deleted_at', 0);
-
         return $this->db->get($this->tableStok);
     }
-
 
     public function cekStokDuplicate($id_seragam, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $id)
     {
         if ($id) {
             $this->db->where('id !=', $id);
         }
-        $this->db->where('id_biaya', $id_seragam);
+        $this->db->where('id_seragam', $id_seragam);
         $this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
         $this->db->where('id_jurusan', $id_jurusan);
         $this->db->where('id_kelas', $id_kelas);
@@ -390,11 +384,10 @@ class Masterdata_model extends CI_Model
     }
 
 
-    //User
+    //Data User
     public function getUserAll()
     {
-        $q = $this->db->get($this->table);
-        return $q->result();
+        return $this->db->get($this->table); // Mengembalikan objek query
     }
 
     public function getUserByID($id = null)
@@ -445,9 +438,3 @@ class Masterdata_model extends CI_Model
         return $this->db->get('users')->row();
     }
 }
-
-   
-
-
-
-/* End of file: Masterdata_model.php */

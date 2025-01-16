@@ -1,27 +1,20 @@
-<div class="container mt-5">
-    <!-- Card for Navtabs -->
-    <div class="card">
-        <div class="card-header">
-            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="tab-jenis" data-toggle="pill" href="#jenis" role="tab" aria-controls="jenis" aria-selected="true">
-                        <i class="fas fa-tshirt"></i> Jenis Seragam
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="tab-stok" data-toggle="pill" href="#stok" role="tab" aria-controls="stok" aria-selected="false">
-                        <i class="fas fa-box"></i> Stok Seragam
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card-body">
-            <div class="tab-content" id="custom-tabs-one-tabContent">
-                <!-- Jenis Seragam -->
-                <div class="tab-pane fade show active" id="jenis" role="tabpanel" aria-labelledby="tab-jenis">
-                    <div class="btn btn-primary btnTambahSeragam mb-2"> <i class="fas fa-plus"></i> Tambah</div>
-                    <table class="table table-bordered" id="tabelSeragam">
+<div class="card card-primary card-tabs">
+    <div class="card-header p-0 pt-1">
+        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Jenis Seragam</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Stok Seragam</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content" id="custom-tabs-one-tabContent">
+            <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                <div class="btn btn-primary btnTambahSeragam mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="row">
+                    <table class="table table-striped" id="tabelSeragam">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -33,11 +26,11 @@
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Stok Seragam -->
-                <div class="tab-pane fade" id="stok" role="tabpanel" aria-labelledby="tab-stok">
-                    <div class="btn btn-primary btnTambahStok mb-2"> <i class="fas fa-plus"></i> Tambah</div>
-                    <table class="table table-bordered" id="tabelStok">
+            </div>
+            <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                <div class="btn btn-primary btnTambahStok mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="row">
+                    <table class="table table-striped" id="tabelStok">
                         <thead>
                             <tr>
                                 <th>No</th>
