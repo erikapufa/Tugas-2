@@ -67,7 +67,7 @@ class Kelas extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function save()
+    public function save_kelas()
     {
 
         $id = $this->input->post('id');
@@ -85,11 +85,11 @@ class Kelas extends CI_Controller
                 $ret['message'] = 'Kelas sudah ada';
             } else {
                 if ($id) {
-                    $this->md->updateKelas($id, $data);
+                    $this->md->update_kelas($id, $data);
                     $ret['status'] = true;
                     $ret['message'] = 'Data berhasil diupdate';
                 } else {
-                    $this->md->saveKelas($data);
+                    $this->md->save_kelas($data);
                     $ret['status'] = true;
                     $ret['message'] = 'Data berhasil disimpan';
                 }
@@ -102,7 +102,7 @@ class Kelas extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function edit()
+    public function edit_kelas()
     {
         $id = $this->input->post('id');
         $q = $this->md->getKelasByID($id);
@@ -119,11 +119,11 @@ class Kelas extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function delete()
+    public function delete_kelas()
     {
         $id = $this->input->post('id');
         $data['deleted_at'] = time();
-        $q = $this->md->updateKelas($id, $data);
+        $q = $this->md->update_kelas($id, $data);
         if ($q) {
             $ret['status'] = true;
             $ret['message'] = 'Data berhasil dihapus';

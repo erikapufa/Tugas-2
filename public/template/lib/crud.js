@@ -1,4 +1,7 @@
 $(document).ready(function () {
+	loadTabel("tahun_pelajaran", "tahun_pelajaran");
+	loadTabel("jurusan", "jurusan");
+	loadTabel("kelas", "kelas");
 	loadTabel("biaya", "jenis_biaya");
 	loadTabel("biaya", "harga_biaya");
 	loadTabel("seragam", "jenis_seragam");
@@ -17,9 +20,9 @@ $(document).ready(function () {
 		$("#id_kelas").load(url + "/" + id);
 	});
 
-    $("#id_biaya").load("biaya/option_biaya");
-    
-    $("#id_seragam").load("biaya/option_seragam");
+	$("#id_biaya").load("biaya/option_biaya");
+
+	$("#id_seragam").load("biaya/option_seragam");
 });
 
 $(document).on("click", ".addBtn", function () {
@@ -62,6 +65,20 @@ function loadTabel(targetController, table) {
 						tr.append("<td>" + item.nama_kelas + "</td>");
 						tr.append("<td>" + item.ukuran + "</td>");
 						tr.append("<td>" + item.stok + "</td>");
+					} else if (table === "kelas") {
+						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+						tr.append("<td>" + item.nama_jurusan + "</td>");
+						tr.append("<td>" + item.nama_kelas + "</td>");
+					} else if (table === "jurusan") {
+						tr.append("<td>" + no++ + "</td>");
+						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+						tr.append("<td>" + item.nama_jurusan + "</td>");
+					} else if (table === "tahun_pelajaran") {
+						tr.append("<td>" + no++ + "</td>");
+						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+						tr.append("<td>" + item.tanggal_mulai + "</td>");
+						tr.append("<td>" + item.tanggal_akhir + "</td>");
+						tr.append("<td>" + item.status_tahun_pelajaran + "</td>");
 					}
 					tr.append(
 						'<td> <button class="btn btn-primary editBtn" data-method="' +
@@ -114,31 +131,24 @@ $(document).on("click", ".saveBtn", function () {
 
 $(document).on("click", ".deleteBtn", function () {
 	var targetController = $(this).data("target");
+	var targetMethod = $(this).data("method");
 	var id = $(this).data("id");
-	var url = "biaya/delete_" + targetController;
-	if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-		$.ajax({
-			url: url,
-			type: "POST",
-			data: {
-				id: id,
-			},
-			dataType: "json",
-			success: function (response) {
-				if (response.status) {
-					alert(response.message);
-					loadTabel("jenis_biaya");
-					loadTabel("harga_biaya");
-				} else {
-					alert(response.message || "Gagal menghapus data.");
-				}
-			},
-			error: function (xhr, status, error) {
-				console.error("Error:", error);
-				alert("Terjadi kesalahan, silakan coba lagi nanti.");
-			},
-		});
-	}
+	$.ajax({
+		url: targetController + "/delete_" + targetMethod,
+		type: "POST",
+		data: {
+			id: id,
+		},
+		dataType: "json",
+		success: function (response) {
+			if (response.status) {
+				alert(response.message);
+				tampilkan_table(targetController, targetMethod);
+			} else {
+				alert(response.message);
+			}
+		},
+	});
 });
 
 $(document).on("click", ".editBtn", function () {

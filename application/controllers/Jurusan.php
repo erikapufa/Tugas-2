@@ -52,7 +52,7 @@ class Jurusan extends CI_Controller
         echo $ret;
     }
 
-    public function save()
+    public function save_jurusan()
     {
 
         $id = $this->input->post('id');
@@ -71,7 +71,7 @@ class Jurusan extends CI_Controller
             } else {
 
                 if ($id) {
-                    $q = $this->md->updateJurusan($id, $data);
+                    $q = $this->md->update_jurusan($id, $data);
                     if ($q) {
                         $ret['status'] = true;
                         $ret['message'] = 'Data berhasil diupdate';
@@ -80,7 +80,7 @@ class Jurusan extends CI_Controller
                         $ret['message'] = 'Data gagal diupdate';
                     }
                 } else {
-                    $q = $this->md->saveJurusan($data);
+                    $q = $this->md->save_jurusan($data);
                     if ($q) {
                         $ret['status'] = true;
                         $ret['message'] = 'Data berhasil disimpan';
@@ -97,11 +97,11 @@ class Jurusan extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function delete()
+    public function delete_jurusan()
     {
         $id = $this->input->post('id');
         $data['deleted_at'] = time();
-        $q = $this->md->updateJurusan($id, $data);
+        $q = $this->md->update_jurusan($id, $data);
         if ($q) {
             $ret['status'] = true;
             $ret['message'] = 'Data berhasil dihapus';
@@ -111,7 +111,7 @@ class Jurusan extends CI_Controller
         }
         echo json_encode($ret);
     }
-    public function edit()
+    public function edit_jurusan()
     {
 
         $id = $this->input->post('id');

@@ -51,19 +51,19 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableTahunPelajaran);
 	}
 
-	public function  saveTahunPelajaran($data)
+	public function  save_tahun_pelajaran($data)
 	{
 		$this->db->insert($this->tableTahunPelajaran, $data);
 		return $this->db->insert_id();
 	}
-	public function updateTahunPelajaran($id, $data)
+	public function update_tahun_pelajaran($id, $data)
 	{
 		$this->db->where('id', $id);
 		$this->db->update($this->tableTahunPelajaran, $data);
 		return $this->db->affected_rows();
 	}
 
-	public function deleteTahunPelajaran($id)
+	public function delete_tahun_pelajaran($id)
 	{
 		$this->db->where('id', $id);
 		$this->db->delete($this->tableTahunPelajaran);
@@ -106,20 +106,20 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableJurusan);
 	}
 
-	public function saveJurusan($data)
+	public function save_jurusan($data)
 	{
 		$this->db->insert($this->tableJurusan, $data);
 		return $this->db->insert_id();
 	}
 
-	public function updateJurusan($id, $data)
+	public function update_jurusan($id, $data)
 	{
 		$this->db->where('id', $id);
 		$this->db->update($this->tableJurusan, $data);
 		return $this->db->affected_rows();
 	}
 
-	public function deleteJurusan($id)
+	public function delete_jurusan($id)
 	{
 		$this->db->where('id', $id);
 		$this->db->delete($this->tableJurusan);
@@ -159,20 +159,20 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableKelas);
 	}
 
-	public function saveKelas($data)
+	public function save_kelas($data)
 	{
 		$this->db->insert($this->tableKelas, $data);
 		return $this->db->insert_id();
 	}
 
-	public function updateKelas($id, $data)
+	public function update_kelas($id, $data)
 	{
 		$this->db->where('id', $id);
 		$this->db->update($this->tableKelas, $data);
 		return $this->db->affected_rows();
 	}
 
-	public function deleteKelas($id)
+	public function delete_kelas($id)
 	{
 		$this->db->where('id', $id);
 		$this->db->delete($this->tableKelas);

@@ -43,7 +43,7 @@ class Tahun_pelajaran extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function save()
+    public function save_tahun_pelajaran()
     {
         $id = $this->input->post('id');
         $data['nama_tahun_pelajaran'] = $this->input->post('nama_tahun_pelajaran');
@@ -62,7 +62,7 @@ class Tahun_pelajaran extends CI_Controller
                 $ret['query'] = $this->db->last_query();
             } else {
                 if ($id) {
-                    $q = $this->md->updateTahunPelajaran($id, $data);
+                    $q = $this->md->update_tahun_pelajaran($id, $data);
                     if ($q) {
                         $ret['status'] = true;
                         $ret['message'] = 'Data berhasil diupdate';
@@ -71,7 +71,7 @@ class Tahun_pelajaran extends CI_Controller
                         $ret['message'] = 'Data gagal diupdate';
                     }
                 } else {
-                    $q = $this->md->saveTahunPelajaran($data);
+                    $q = $this->md->save_tahun_pelajaran($data);
                     if ($q) {
                         $ret['status'] = true;
                         $ret['message'] = 'Data berhasil disimpan';
@@ -90,7 +90,7 @@ class Tahun_pelajaran extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function edit()
+    public function edit_tahun_pelajaran()
     {
 
         $id = $this->input->post('id');
@@ -113,11 +113,11 @@ class Tahun_pelajaran extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function delete()
+    public function delete_tahun_pelajaran()
     {
         $id = $this->input->post('id');
         $data['deleted_at'] = time();
-        $q = $this->md->updateTahunPelajaran($id, $data);
+        $q = $this->md->update_tahun_pelajaran($id, $data);
         if ($q) {
             $ret['status'] = true;
             $ret['message'] = 'Data berhasil dihapus';
