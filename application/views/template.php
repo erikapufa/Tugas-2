@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="<?php echo base_url('public/template/css/adminlte.min.css'); ?>" />
     <!-- jQuery -->
     <script src="<?php echo base_url('public/template/plugins/jquery/jquery.min.js'); ?>"></script>
+    <!-- jQuery -->
+    <script src="<?php echo base_url('public/template/lib/crud.js'); ?>"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">

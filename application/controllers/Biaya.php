@@ -21,7 +21,7 @@ class Biaya extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function table_biaya()
+    public function table_jenis_biaya()
     {
 
         $q = $this->md->getAllBiayaNotDeleted();
@@ -43,7 +43,7 @@ class Biaya extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function saveBiaya()
+    public function save_jenis_biaya()
     {
         $id = $this->input->post('id');
         $data['nama_biaya'] = $this->input->post('nama_biaya');
@@ -97,7 +97,7 @@ class Biaya extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function editBiaya()
+    public function edit_jenis_biaya()
     {
 
         $id = $this->input->post('id');
@@ -121,11 +121,11 @@ class Biaya extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function deleteBiaya()
+    public function delete_jenis_biaya()
     {
 
         $id = $this->input->post('id');
-        $q = $this->md->deleteBiaya($id);
+        $q = $this->md->delete_jenis_biaya($id);
 
         if ($q) {
             $ret['status'] = true;
@@ -213,7 +213,7 @@ class Biaya extends CI_Controller
         echo $ret;
     }
 
-    public function saveHargaBiaya()
+    public function save_harga_biaya()
     {
         $id = $this->input->post('id');
         $data['id_biaya'] = $this->input->post('id_biaya');
@@ -262,7 +262,7 @@ class Biaya extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function editHargaBiaya()
+    public function edit_harga_biaya()
     {
 
         $id = $this->input->post('id');
@@ -286,11 +286,11 @@ class Biaya extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function deleteHargaBiaya()
+    public function delete_harga_biaya()
     {
 
         $id = $this->input->post('id');
-        $q = $this->md->deleteHargaBiaya($id);
+        $q = $this->md->delete_harga_biaya($id);
 
         if ($q) {
             $ret['status'] = true;

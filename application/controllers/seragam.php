@@ -21,7 +21,7 @@ class Seragam extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function table_seragam()
+    public function table_jenis_seragam()
     {
 
         $q = $this->md->getAllSeragamNotDeleted();
@@ -43,7 +43,7 @@ class Seragam extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function saveSeragam()
+    public function save_jenis_seragam()
     {
         $id = $this->input->post('id');
         $data['nama_seragam'] = $this->input->post('nama_seragam');
@@ -96,7 +96,7 @@ class Seragam extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function editSeragam()
+    public function edit_jenis_seragam()
     {
 
         $id = $this->input->post('id');
@@ -120,11 +120,11 @@ class Seragam extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function deleteSeragam()
+    public function delete_jenis_seragam()
     {
 
         $id = $this->input->post('id');
-        $q = $this->md->deleteSeragam($id);
+        $q = $this->md->delete_jenis_seragam($id);
 
         if ($q) {
             $ret['status'] = true;
@@ -139,7 +139,7 @@ class Seragam extends CI_Controller
 
 
     // harga biaya
-    public function table_stok()
+    public function table_stok_seragam()
     {
 
         $q = $this->md->getAllStokNotDeleted();
@@ -212,7 +212,7 @@ class Seragam extends CI_Controller
         echo $ret;
     }
 
-    public function saveStok()
+    public function save_stok_seragam()
     {
         $id = $this->input->post('id');
         $data['id_seragam'] = $this->input->post('id_seragam');
@@ -226,41 +226,32 @@ class Seragam extends CI_Controller
         $data['deleted_at'] = 0;
 
         if ($data['stok']) {
-            $cek = $this->md->cekStokDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $data['ukuran'], $id);
-
-            if ($cek->num_rows() > 0) {
-                $ret['status'] = false;
-                $ret['message'] = 'Data terduplikasi';
-                $ret['query'] = $this->db->last_query();
-            } else {
-
-                if ($id) {
-                    $update = $this->md->updateStok($id, $data);
-                    if ($update) {
-                        $ret = array(
-                            'status' => true,
-                            'message' => 'Data berhasil diupdate'
-                        );
-                    } else {
-                        $ret = array(
-                            'status' => false,
-                            'message' => 'Data gagal diupdate'
-                        );
-                    }
+            if ($id) {
+                $update = $this->md->updateStokSeragam($id, $data);
+                if ($update) {
+                    $ret = array(
+                        'status' => true,
+                        'message' => 'Data berhasil diupdate'
+                    );
                 } else {
-                    $insert = $this->md->insertStok($data);
+                    $ret = array(
+                        'status' => false,
+                        'message' => 'Data gagal diupdate'
+                    );
+                }
+            } else {
+                $insert = $this->md->insertStokSeragam($data);
 
-                    if ($insert) {
-                        $ret = array(
-                            'status' => true,
-                            'message' => 'Data berhasil disimpan'
-                        );
-                    } else {
-                        $ret = array(
-                            'status' => false,
-                            'message' => 'Data gagal disimpan'
-                        );
-                    }
+                if ($insert) {
+                    $ret = array(
+                        'status' => true,
+                        'message' => 'Data berhasil disimpan'
+                    );
+                } else {
+                    $ret = array(
+                        'status' => false,
+                        'message' => 'Data gagal disimpan'
+                    );
                 }
             }
         } else {
@@ -271,7 +262,8 @@ class Seragam extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function editStok()
+
+    public function edit_stok_seragam()
     {
 
         $id = $this->input->post('id');
@@ -281,7 +273,7 @@ class Seragam extends CI_Controller
             $ret = array(
                 'status' => true,
                 'data' => $q->row(),
-                'message' => '',
+                'message' => 'Data berhasil diupdate',
             );
         } else {
             $ret = array(
@@ -295,11 +287,11 @@ class Seragam extends CI_Controller
         echo json_encode($ret);
     }
 
-    public function deleteStok()
+    public function delete_stok_seragam()
     {
 
         $id = $this->input->post('id');
-        $q = $this->md->deleteStok($id);
+        $q = $this->md->delete_stok_seragam($id);
 
         if ($q) {
             $ret['status'] = true;
