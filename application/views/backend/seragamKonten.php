@@ -36,8 +36,8 @@
                                 <th>No</th>
                                 <th>Nama Seragam</th>
                                 <th>Tahun Pelajaran</th>
-                                <th>Jurusan</th>
-                                <th>Kelas</th>
+                                <!-- <th>Jurusan</th>
+                                <th>Kelas</th> -->
                                 <th>Ukuran</th>
                                 <th>Stok</th>
                             </tr>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary saveBtn" data-target="jenis_seragam">Simpan</button>
+                <button type="button" class="btn btn-primary saveBtn" data-target="seragam" data-method="jenis_seragam">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
@@ -104,25 +104,25 @@
                         </div>
                         <div class="mb-1">
                             <label for="id_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-                            <select class="form-control" data-target="biaya" data-method="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
+                            <select class="form-control" data-target="seragam" data-method="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
                                 <option value="">- Pilih Tahun Pelajaran -</option>
                             </select>
                             <div class="error-block"></div>
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                             <label for="id_jurusan" class="form-label">Jurusan</label>
-                            <select class="form-control" data-target="biaya" data-method="jurusan" name="id_jurusan" id="id_jurusan">
+                            <select class="form-control" data-target="seragam" data-method="jurusan" name="id_jurusan" id="id_jurusan">
                                 <option value="">- Pilih Jurusan -</option>
                             </select>
                             <div class="error-block"></div>
                         </div>
                         <div class="mb-1">
                             <label for="id_kelas" class="form-label">Kelas</label>
-                            <select class="form-control" data-target="biaya" data-method="kelas" name="id_kelas" id="id_kelas">
+                            <select class="form-control" data-target="seragam" data-method="kelas" name="id_kelas" id="id_kelas">
                                 <option value="">- Pilih Kelas -</option>
                             </select>
                             <div class="error-block"></div>
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                             <label for="ukuran" class="form-label">Ukuran</label>
                             <input type="text" class="form-control" id="ukuran" name="ukuran" value="">
@@ -137,7 +137,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary saveBtn" data-target="stok_seragam">Simpan</button>
+                <button type="button" class="btn btn-primary saveBtn" data-target="seragam" data-method="stok_seragam">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>

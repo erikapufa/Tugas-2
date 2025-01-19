@@ -37,8 +37,8 @@
                                 <th>No</th>
                                 <th>Nama Biaya</th>
                                 <th>Tahun Pelajaran</th>
-                                <th>Jurusan</th>
-                                <th>Kelas</th>
+                                <!-- <th>Jurusan</th>
+                                <th>Kelas</th> -->
                                 <th>Harga</th>
                                 <th>Aksi</th>
                             </tr>
@@ -115,7 +115,7 @@
                             </select>
                             <div class="error-block"></div>
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                             <label for="id_jurusan" class="form-label">Jurusan</label>
                             <select class="form-control" data-target="biaya" data-method="jurusan" name="id_jurusan" id="id_jurusan">
                                 <option value="">- Pilih Jurusan -</option>
@@ -128,7 +128,7 @@
                                 <option value="">- Pilih Kelas -</option>
                             </select>
                             <div class="error-block"></div>
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                             <label for="harga" class="form-label">Harga</label>
                             <input type="text" class="form-control" id="harga" name="harga" value="">

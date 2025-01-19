@@ -7,22 +7,22 @@ $(document).ready(function () {
 	loadTabel("seragam", "jenis_seragam");
 	loadTabel("seragam", "stok_seragam");
 
-	$("#id_tahun_pelajaran").load("biaya/option_tahun_pelajaran");
+	$("#id_tahun_pelajaran").load("kelas/option_tahun_pelajaran");
 	$("#id_tahun_pelajaran").change(function () {
 		let id = $(this).val(); // id tahun pelajaran
-		let url = "biaya/option_jurusan";
+		let url = "kelas/option_jurusan";
 		$("#id_jurusan").load(url + "/" + id);
 	});
 
 	$("#id_jurusan").change(function () {
 		let id = $(this).val();
-		let url = "biaya/option_kelas";
+		let url = "kelas/option_kelas";
 		$("#id_kelas").load(url + "/" + id);
 	});
 
 	$("#id_biaya").load("biaya/option_biaya");
 
-	$("#id_seragam").load("biaya/option_seragam");
+	$("#id_seragam").load("seragam/option_seragam");
 });
 
 $(document).on("click", ".addBtn", function () {
@@ -52,17 +52,15 @@ function loadTabel(targetController, table) {
 					} else if (table === "harga_biaya") {
 						tr.append("<td>" + item.nama_biaya + "</td>");
 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
-						tr.append("<td>" + item.harga + "</td>");
-						tr.append("<td>" + item.nama_jurusan + "</td>");
-						tr.append("<td>" + item.nama_kelas + "</td>");
+						// tr.append("<td>" + item.harga + "</td>");
+						// tr.append("<td>" + item.nama_jurusan + "</td>");
+						// tr.append("<td>" + item.nama_kelas + "</td>");
 						tr.append("<td>" + item.harga + "</td>");
 					} else if (table === "jenis_seragam") {
 						tr.append("<td>" + item.nama_seragam + "</td>");
 					} else if (table === "stok_seragam") {
 						tr.append("<td>" + item.nama_seragam + "</td>");
 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
-						tr.append("<td>" + item.nama_jurusan + "</td>");
-						tr.append("<td>" + item.nama_kelas + "</td>");
 						tr.append("<td>" + item.ukuran + "</td>");
 						tr.append("<td>" + item.stok + "</td>");
 					} else if (table === "kelas") {
@@ -70,11 +68,9 @@ function loadTabel(targetController, table) {
 						tr.append("<td>" + item.nama_jurusan + "</td>");
 						tr.append("<td>" + item.nama_kelas + "</td>");
 					} else if (table === "jurusan") {
-						tr.append("<td>" + no++ + "</td>");
 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
 						tr.append("<td>" + item.nama_jurusan + "</td>");
 					} else if (table === "tahun_pelajaran") {
-						tr.append("<td>" + no++ + "</td>");
 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
 						tr.append("<td>" + item.tanggal_mulai + "</td>");
 						tr.append("<td>" + item.tanggal_akhir + "</td>");
@@ -150,6 +146,12 @@ $(document).on("click", ".deleteBtn", function () {
 		},
 	});
 });
+function setJurusan(id_tahun_pelajaran, id) {
+	let url = "kelas/option_jurusan";
+	$("#id_jurusan").load(url + "/" + id_tahun_pelajaran, function () {
+		$("#id_jurusan").val(id);
+	});
+}
 
 $(document).on("click", ".editBtn", function () {
 	let targetController = $(this).data("target");
@@ -177,8 +179,8 @@ $(document).on("click", ".editBtn", function () {
 					$("#form_harga_biaya #id").val(response.data.id);
 					$("#id_biaya").val(response.data.id_biaya);
 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
-					$("#id_jurusan").val(response.data.id_jurusan);
-					$("#id_kelas").val(response.data.id_kelas);
+					// $("#id_jurusan").val(response.data.id_jurusan);
+					// $("#id_kelas").val(response.data.id_kelas);
 					$("#harga").val(response.data.harga);
 					$("#modal_" + targetMethod).modal("show");
 					tampilkan_table(targetController, targetMethod);
@@ -209,13 +211,13 @@ $(document).on("click", ".editBtn", function () {
 					);
 					$("#modal_" + targetMethod).modal("show");
 					tampilkan_table(targetController, targetMethod);
-				} else if (targetMethod === "seragam") {
-					$("#form_seragam #id").val(response.data.id);
+				} else if (targetMethod === "jenis_seragam") {
+					$("#form_jenis_seragam #id").val(response.data.id);
 					$("#nama_seragam").val(response.data.nama_seragam);
 					$("#modal_" + targetMethod).modal("show");
 					tampilkan_table(targetController, targetMethod);
-				} else if (targetMethod === "stok") {
-					$("#form_stok #id").val(response.data.id);
+				} else if (targetMethod === "stok_seragam") {
+					$("#form_stok_seragam #id").val(response.data.id);
 					$("#id_seragam").val(response.data.id_seragam);
 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
 					$("#ukuran").val(response.data.ukuran);

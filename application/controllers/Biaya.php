@@ -174,31 +174,6 @@ class Biaya extends CI_Controller
         echo $ret;
     }
 
-    public function option_jurusan($id)
-    {
-
-        $q = $this->md->getJurusanByTahunPelajaranID($id);
-        $ret = '<option value="">Pilih Jurusan</option>';
-        if ($q->num_rows() > 0) {
-            foreach ($q->result() as $row) {
-                $ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
-            }
-        }
-        echo $ret;
-    }
-
-    public function option_kelas($id)
-    {
-
-        $q = $this->md->getKelasByJurusanID($id);
-        $ret = '<option value="">Pilih kelas</option>';
-        if ($q->num_rows() > 0) {
-            foreach ($q->result() as $row) {
-                $ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
-            }
-        }
-        echo $ret;
-    }
 
     public function option_biaya()
     {
@@ -217,9 +192,7 @@ class Biaya extends CI_Controller
     {
         $id = $this->input->post('id');
         $data['id_biaya'] = $this->input->post('id_biaya');
-        $data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
-        $data['id_jurusan'] = $this->input->post('id_jurusan');
-        $data['id_kelas'] = $this->input->post('id_kelas');
+        $data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');;
         $data['harga'] = $this->input->post('harga');
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['updated_at'] = date('Y-m-d H:i:s');
