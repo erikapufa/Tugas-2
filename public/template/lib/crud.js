@@ -152,10 +152,10 @@ $(document).on("click", ".deleteBtn", function () {
 });
 
 $(document).on("click", ".editBtn", function () {
-	var targetController = $(this).data("target");
-	var id = $(this).data("id");
-	var url = "biaya/edit_" + targetController;
-	var formData = new FormData($("#form_" + targetController)[0]);
+	let targetController = $(this).data("target");
+	let targetMethod = $(this).data("method");
+	let id = $(this).data("id");
+	let url = targetController + "/edit_" + targetMethod + "/" + id;
 
 	$.ajax({
 		url: url,
@@ -166,19 +166,68 @@ $(document).on("click", ".editBtn", function () {
 		dataType: "json",
 		success: function (response) {
 			if (response.status) {
-				if (targetController === "jenis_biaya") {
-					// Use targetController here
-					$("#id").val(response.data.id);
+				if (targetMethod === "jenis_biaya") {
+					$("#form_jenis_biaya #id").val(response.data.id);
 					$("#nama_biaya").val(response.data.nama_biaya);
 					$("#deskripsi").val(response.data.deskripsi);
-					$("#modal_" + targetController).modal("show");
-				} else if (targetController === "harga_biaya") {
-					// Use targetController here
-					$("#id").val(response.data.id);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "harga_biaya") {
+					console.log(response.data);
+					$("#form_harga_biaya #id").val(response.data.id);
 					$("#id_biaya").val(response.data.id_biaya);
 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+					$("#id_jurusan").val(response.data.id_jurusan);
+					$("#id_kelas").val(response.data.id_kelas);
 					$("#harga").val(response.data.harga);
-					$("#modal_" + targetController).modal("show");
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "tahun_pelajaran") {
+					$("#id").val(response.data.id);
+					$("#nama_tahun_pelajaran").val(response.data.nama_tahun_pelajaran);
+					$("#tanggal_mulai").val(response.data.tanggal_mulai);
+					$("#tanggal_akhir").val(response.data.tanggal_akhir);
+					$("#status_tahun_pelajaran").val(
+						response.data.status_tahun_pelajaran
+					);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "jurusan") {
+					$("#id").val(response.data.id);
+					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+					$("#nama_jurusan").val(response.data.nama_jurusan);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "kelas") {
+					$("#id").val(response.data.id);
+					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+					$("#id_jurusan").val(response.data.id_jurusan);
+					$("#nama_kelas").val(response.data.nama_kelas);
+					setJurusan(
+						response.data.id_tahun_pelajaran,
+						response.data.id_jurusan
+					);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "seragam") {
+					$("#form_seragam #id").val(response.data.id);
+					$("#nama_seragam").val(response.data.nama_seragam);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "stok") {
+					$("#form_stok #id").val(response.data.id);
+					$("#id_seragam").val(response.data.id_seragam);
+					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+					$("#ukuran").val(response.data.ukuran);
+					$("#stok").val(response.data.stok);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
+				} else if (targetMethod === "akun_pengguna") {
+					$("#id").val(response.data.id);
+					$("#username").val(response.data.username);
+					$("#password").val(response.data.password);
+					$("#modal_" + targetMethod).modal("show");
+					tampilkan_table(targetController, targetMethod);
 				}
 			} else {
 				alert(response.message);
