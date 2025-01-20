@@ -224,12 +224,6 @@ $(document).on("click", ".editBtn", function () {
 					$("#stok").val(response.data.stok);
 					$("#modal_" + targetMethod).modal("show");
 					tampilkan_table(targetController, targetMethod);
-				} else if (targetMethod === "akun_pengguna") {
-					$("#id").val(response.data.id);
-					$("#username").val(response.data.username);
-					$("#password").val(response.data.password);
-					$("#modal_" + targetMethod).modal("show");
-					tampilkan_table(targetController, targetMethod);
 				}
 			} else {
 				alert(response.message);
