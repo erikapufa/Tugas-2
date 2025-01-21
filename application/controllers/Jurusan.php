@@ -12,6 +12,7 @@ class Jurusan extends CI_Controller
 
     public function index()
     {
+
         $data = array(
             'menu' => 'backend/menu',
             'content' => 'backend/jurusanKonten',
@@ -22,6 +23,7 @@ class Jurusan extends CI_Controller
 
     public function table_jurusan()
     {
+
         $q = $this->md->getAllJurusanNotDeleted();
         $dt = [];
         if ($q->num_rows() > 0) {
@@ -37,13 +39,14 @@ class Jurusan extends CI_Controller
             $ret['data'] = [];
             $ret['message'] = 'Data tidak tersedia';
         }
+
         echo json_encode($ret);
     }
 
     public function option_tahun_pelajaran()
     {
         $q = $this->md->getAllTahunPelajaranNotDeleted();
-        $ret = '';
+        $ret = '<option value="">Pilih Tahun Pelajaran</option>';
         if ($q->num_rows() > 0) {
             foreach ($q->result() as $row) {
                 $ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
@@ -52,75 +55,17 @@ class Jurusan extends CI_Controller
         echo $ret;
     }
 
-    public function save_jurusan()
-    {
-
-        $id = $this->input->post('id');
-        $id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
-        $data['nama_jurusan'] = $this->input->post('nama_jurusan');
-        $data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
-        $data['created_at'] = date('Y-m-d H:i:s');
-        $data['updated_at'] = date('Y-m-d H:i:s');
-        $data['deleted_at'] = 0;
-
-        if ($data['nama_jurusan']) {
-            $cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $id_tahun_pelajaran, $id);
-            if ($cek->num_rows() > 0) {
-                $ret['status'] = false;
-                $ret['message'] = 'Jurusan sudah ada';
-            } else {
-
-                if ($id) {
-                    $q = $this->md->update_jurusan($id, $data);
-                    if ($q) {
-                        $ret['status'] = true;
-                        $ret['message'] = 'Data berhasil diupdate';
-                    } else {
-                        $ret['status'] = false;
-                        $ret['message'] = 'Data gagal diupdate';
-                    }
-                } else {
-                    $q = $this->md->save_jurusan($data);
-                    if ($q) {
-                        $ret['status'] = true;
-                        $ret['message'] = 'Data berhasil disimpan';
-                    } else {
-                        $ret['status'] = false;
-                        $ret['message'] = 'Data gagal disimpan';
-                    }
-                }
-            }
-        } else {
-            $ret['status'] = false;
-            $ret['message'] = 'Data gagal disimpan';
-        }
-        echo json_encode($ret);
-    }
-
-    public function delete_jurusan()
-    {
-        $id = $this->input->post('id');
-        $data['deleted_at'] = time();
-        $q = $this->md->update_jurusan($id, $data);
-        if ($q) {
-            $ret['status'] = true;
-            $ret['message'] = 'Data berhasil dihapus';
-        } else {
-            $ret['status'] = false;
-            $ret['message'] = 'Data gagal dihapus';
-        }
-        echo json_encode($ret);
-    }
     public function edit_jurusan()
     {
 
         $id = $this->input->post('id');
         $q = $this->md->getJurusanByID($id);
+
         if ($q->num_rows() > 0) {
             $ret = array(
                 'status' => true,
                 'data' => $q->row(),
-                'message' => ''
+                'message' => '',
             );
         } else {
             $ret = array(
@@ -133,6 +78,75 @@ class Jurusan extends CI_Controller
 
         echo json_encode($ret);
     }
-}
 
-/* End of file: Jurusan.php */
+
+    public function delete_jurusan()
+    {
+
+        $id = $this->input->post('id');
+        $data['deleted_at'] = time();
+        $q = $this->md->updateJurusan($id, $data);
+
+        if ($q) {
+            $ret['status'] = true;
+            $ret['message'] = 'Data berhasil dihapus';
+        } else {
+            $ret['status'] = false;
+            $ret['message'] = 'Data gagal dihapus';
+        }
+
+        echo json_encode($ret);
+    }
+    public function save_jurusan()
+    {
+        $id = $this->input->post('id');
+        $data['nama_jurusan'] = $this->input->post('nama_jurusan');
+        $data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $data['deleted_at'] = 0;
+
+        // Set validation rules
+        $this->form_validation->set_rules('nama_jurusan', 'Jurusan', 'trim|required', array('required' => '%s masih kosong'));
+
+        // Run validation
+        if ($this->form_validation->run() == FALSE) {
+            $ret['status'] = false;
+            foreach ($_POST as $key => $value) {
+                $ret['error'][$key] = form_error($key);
+            }
+        } else {
+            if ($id) {
+                $update = $this->md->updateJurusan($id, $data);
+                if ($update) {
+                    $ret = array(
+                        'status' => true,
+                        'message' => 'Data berhasil diupdate'
+                    );
+                } else {
+                    $ret = array(
+                        'status' => false,
+                        'message' => 'Data gagal diupdate'
+                    );
+                }
+            } else {
+                $insert = $this->md->insertJurusan($data);
+
+                if ($insert) {
+                    $ret = array(
+                        'status' => true,
+                        'message' => 'Data berhasil disimpan'
+                    );
+                } else {
+                    $ret = array(
+                        'status' => false,
+                        'message' => 'Data gagal disimpan'
+                    );
+                }
+            }
+        }
+
+        // Return the response in JSON format
+        echo json_encode($ret);
+    }
+}

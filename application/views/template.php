@@ -16,6 +16,12 @@
     <script src="<?php echo base_url('public/template/plugins/jquery/jquery.min.js'); ?>"></script>
     <!-- jQuery -->
     <script src="<?php echo base_url('public/template/lib/crud.js'); ?>"></script>
+    <script src="<?php echo base_url('public/template/lib/chainedSelect.js'); ?>"></script>
+    <script>
+        var baseUrl = '<?php echo base_url(); ?>';
+        var currentClass = '<?php echo $this->router->fetch_class(); ?>';
+        var baseClass = baseUrl + currentClass;
+    </script>
 </head>
 
 <body class="hold-transition sidebar-mini">

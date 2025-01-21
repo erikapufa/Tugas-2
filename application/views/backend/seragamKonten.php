@@ -12,14 +12,14 @@
     <div class="card-body">
         <div class="tab-content" id="custom-tabs-one-tabContent">
             <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                <div class="btn btn-primary addBtn mb-2" data-method="jenis_seragam"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary tambahBtn mb-2" data-target="seragam"> <i class="fas fa-plus"></i> Tambah</div>
                 <div class="row">
-                    <table class="table table-striped" data-target="Seragam" id="table_jenis_seragam">
+                    <table class="table table-striped" id="table_seragam" data-target="seragam">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama Seragam</th>
-                                <th>Aksi</th>
+                                <th data-key="no">No</th>
+                                <th data-key="nama_seragam">Nama Seragam</th>
+                                <th data-key="btn_aksi">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,18 +28,17 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                <div class="btn btn-primary addBtn mb-2" data-method="stok_seragam"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary tambahBtn mb-2" data-target="stok"> <i class="fas fa-plus"></i> Tambah</div>
                 <div class="row">
-                    <table class="table table-striped" data-target="Seragam" id="table_stok_seragam">
+                    <table class="table table-striped" id="table_stok" data-target="stok">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama Seragam</th>
-                                <th>Tahun Pelajaran</th>
-                                <!-- <th>Jurusan</th>
-                                <th>Kelas</th> -->
-                                <th>Ukuran</th>
-                                <th>Stok</th>
+                                <th data-key="no">No</th>
+                                <th data-key="nama_seragam">Nama Seragam</th>
+                                <th data-key="nama_tahun_pelajaran">Tahun Pelajaran</th>
+                                <th data-key="ukuran">Ukuran</th>
+                                <th data-key="stok">Stok</th>
+                                <th data-key="btn_aksi">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,7 +50,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_jenis_seragam" tabindex="-1" role="dialog">
+<div class="modal" id="modal_seragam" tabindex=" -1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -63,7 +62,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-user">
-                    <form id="form_jenis_seragam" action="#" method="post" enctype="multipart/form-data">
+                    <form id="form_seragam" action="#" method="post" enctype="multipart/form-data">
                         <input type="hidden" class="form-control" id="id" name="id" value="">
                         <div class="mb-1">
                             <label for="nama_seragam" class="form-label">Nama Seragam</label>
@@ -74,58 +73,50 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary saveBtn" data-target="seragam" data-method="jenis_seragam">Simpan</button>
+                <button type="button" class="btn btn-primary saveBtn" data-target="seragam">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal" id="modal_stok_seragam" tabindex="-1" role="dialog">
+<div class="modal" id="modal_stok" tabindex=" -1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Stok Seragam</h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close " data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-user">
-                    <form id="form_stok_seragam" action="#" method="post" enctype="multipart/form-data">
+                    <form id="form_stok" action="#" method="post" enctype="multipart/form-data">
                         <input type="hidden" class="form-control" id="id" name="id" value="">
                         <div class="mb-1">
                             <label for="id_seragam" class="form-label">Nama Seragam</label>
-                            <select class="form-control" data-target="seragam" data-method="seragam" name="id_seragam" id="id_seragam">
+                            <select class="form-control loadSelect" data-target="seragam" name="id_seragam" id="id_seragam">
                                 <option value="">- Pilih Seragam -</option>
                             </select>
                             <div class="error-block"></div>
                         </div>
                         <div class="mb-1">
                             <label for="id_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-                            <select class="form-control" data-target="seragam" data-method="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
+                            <select class="form-control loadSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
                                 <option value="">- Pilih Tahun Pelajaran -</option>
                             </select>
                             <div class="error-block"></div>
                         </div>
-                        <!-- <div class="mb-1">
-                            <label for="id_jurusan" class="form-label">Jurusan</label>
-                            <select class="form-control" data-target="seragam" data-method="jurusan" name="id_jurusan" id="id_jurusan">
-                                <option value="">- Pilih Jurusan -</option>
-                            </select>
-                            <div class="error-block"></div>
-                        </div>
-                        <div class="mb-1">
-                            <label for="id_kelas" class="form-label">Kelas</label>
-                            <select class="form-control" data-target="seragam" data-method="kelas" name="id_kelas" id="id_kelas">
-                                <option value="">- Pilih Kelas -</option>
-                            </select>
-                            <div class="error-block"></div>
-                        </div> -->
                         <div class="mb-1">
                             <label for="ukuran" class="form-label">Ukuran</label>
-                            <input type="text" class="form-control" id="ukuran" name="ukuran" value="">
+                            <select class="form-control" id="ukuran" name="ukuran">
+                                <option value="">Pilih Ukuran</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select>
                             <div class="error-block"></div>
                         </div>
                         <div class="mb-1">
@@ -137,7 +128,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary saveBtn" data-target="seragam" data-method="stok_seragam">Simpan</button>
+                <button type="button" class="btn btn-primary saveBtn" data-target="stok">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>

@@ -45,5 +45,12 @@ class User_model extends CI_Model
     {
         return $this->db->where('username', $username)->get($this->table);
     }
+
+    public function login($username, $password)
+    {
+
+        $q = $this->db->where('username', $username)->where('password', $password)->get($this->table);
+        return $q;
+    }
 }
 ?>

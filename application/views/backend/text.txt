@@ -1,424 +1,233 @@
-<div class="card card-primary card-tabs">
-    <div class="card-header p-0 pt-1">
-        <ul class="nav nav-tabs tab_harga_biaya" id="custom-tabs-one-tab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Jenis Biaya</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Harga</a>
-            </li>
-        </ul>
-    </div>
-    <div class="card-body">
-        <div class="tab-content" id="custom-tabs-one-tabContent">
-            <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                <div class="btn btn-primary btn_tambah_biaya mb-2"> <i class="fas fa-plus"></i> Tambah</div>
-                <div class="row">
-                    <table class="table table-striped" id="table_biaya">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Biaya</th>
-                                <th>Deskripsi</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                <div class="btn btn-primary btn_tambah_harga_biaya mb-2"> <i class="fas fa-plus"></i> Tambah</div>
-				<div class="row">
-					<table class="table table-striped" id="table_harga_biaya">
-						<thead>
-							<tr>
-								<th>No</th>
-								<th>Nama Biaya</th>
-								<th>Tahun Pelajaran</th>
-								<th>Harga</th>
-								<th>Aksi</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-            </div>
-        </div>
-    </div>
-</div>
+// $(document).ready(function () {
+// 	loadTabel("tahun_pelajaran", "tahun_pelajaran");
+// 	loadTabel("jurusan", "jurusan");
+// 	loadTabel("kelas", "kelas");
+// 	loadTabel("biaya", "jenis_biaya");
+// 	loadTabel("biaya", "harga_biaya");
+// 	loadTabel("seragam", "jenis_seragam");
+// 	loadTabel("seragam", "stok_seragam");
 
-<div class="modal" id="modal_biaya" tabindex=" -1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Jenis Biaya</h5>
+// 	$("#id_tahun_pelajaran").load("kelas/option_tahun_pelajaran");
+// 	$("#id_tahun_pelajaran").change(function () {
+// 		let id = $(this).val(); // id tahun pelajaran
+// 		let url = "kelas/option_jurusan";
+// 		$("#id_jurusan").load(url + "/" + id);
+// 	});
 
-				<button type="button" class="close " data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="form-user">
-					<form id="form_biaya" action="#" method="post" enctype="multipart/form-data">
-						<input type="hidden" class="form-control" id="id" name="id" value="">
-						<div class="mb-1">
-							<label for="nama_biaya" class="form-label">Nama Biaya</label>
-							<input type="text" class="form-control" id="nama_biaya" name="nama_biaya" value="">
-							<div class="error-block"></div>
-						</div>
-						<div class="mb-1">
-							<label for="deskripsi" class="form-label">Deskripsi</label>
-							<input type="text" class="form-control" id="deskripsi" name="deskripsi" value="">
-							<div class="error-block"></div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-target="biaya" data-method="biaya">Simpan</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-			</div>
-		</div>
-	</div>
-</div>
+// 	$("#id_jurusan").change(function () {
+// 		let id = $(this).val();
+// 		let url = "kelas/option_kelas";
+// 		$("#id_kelas").load(url + "/" + id);
+// 	});
 
-<div class="modal" id="modal_harga_biaya" tabindex=" -1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Harga Biaya</h5>
+// 	$("#id_biaya").load("biaya/option_biaya");
 
-				<button type="button" class="close " data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="form-user">
-					<form id="form_harga_biaya" action="#" method="post" enctype="multipart/form-data">
-						<input type="hidden" class="form-control" id="id" name="id" value="">
-						<div class="mb-1">
-							<label for="id_biaya" class="form-label">Nama Biaya</label>
-							<select class="form-control" name="id_biaya" id="id_biaya">
-								<option value="">- Pilih Biaya -</option>
-							</select>
-							<div class="error-block"></div>
-						</div>
-						<div class="mb-1">
-							<label for="id_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-							<select class="form-control" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
-								<option value="">- Pilih Tahun Pelajaran -</option>
-							</select>
-							<div class="error-block"></div>
-						</div>
-                        <div class="mb-1">
-							<label for="harga" class="form-label">Harga</label>
-							<input type="text" class="form-control" id="harga" name="harga" value="">
-							<div class="error-block"></div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-target="biaya" data-method="harga_biaya">Simpan</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-			</div>
-		</div>
-	</div>
-</div>
+// 	$("#id_seragam").load("seragam/option_seragam");
+// });
 
-<script>
-    $(document).ready(function() {
-		tampilkan_table('biaya', 'biaya');
-        tampilkan_table('biaya', 'harga_biaya');
-			
-	})
+// $(document).on("click", ".addBtn", function () {
+// 	var targetMethod = $(this).data("method");
+// 	$("#id").val("");
+// 	$("#form_" + targetMethod).trigger("reset");
+// 	$("#modal_" + targetMethod).modal("show");
+// });
 
+// function loadTabel(targetController, table) {
+// 	let tableElement = $("#table_" + table);
+// 	$.ajax({
+// 		url: targetController + "/table_" + table,
+// 		type: "GET",
+// 		dataType: "json",
+// 		success: function (response) {
+// 			if (response.status) {
+// 				let no = 1;
+// 				tableElement.find("tbody").html("");
+// 				$.each(response.data, function (i, item) {
+// 					let tr = $("<tr>");
+// 					tr.append("<td>" + no++ + "</td>");
 
-    $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
-    $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
+// 					if (table === "jenis_biaya") {
+// 						tr.append("<td>" + item.nama_biaya + "</td>");
+// 						tr.append("<td>" + item.deskripsi + "</td>");
+// 					} else if (table === "harga_biaya") {
+// 						tr.append("<td>" + item.nama_biaya + "</td>");
+// 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+// 						// tr.append("<td>" + item.harga + "</td>");
+// 						// tr.append("<td>" + item.nama_jurusan + "</td>");
+// 						// tr.append("<td>" + item.nama_kelas + "</td>");
+// 						tr.append("<td>" + item.harga + "</td>");
+// 					} else if (table === "jenis_seragam") {
+// 						tr.append("<td>" + item.nama_seragam + "</td>");
+// 					} else if (table === "stok_seragam") {
+// 						tr.append("<td>" + item.nama_seragam + "</td>");
+// 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+// 						tr.append("<td>" + item.ukuran + "</td>");
+// 						tr.append("<td>" + item.stok + "</td>");
+// 					} else if (table === "kelas") {
+// 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+// 						tr.append("<td>" + item.nama_jurusan + "</td>");
+// 						tr.append("<td>" + item.nama_kelas + "</td>");
+// 					} else if (table === "jurusan") {
+// 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+// 						tr.append("<td>" + item.nama_jurusan + "</td>");
+// 					} else if (table === "tahun_pelajaran") {
+// 						tr.append("<td>" + item.nama_tahun_pelajaran + "</td>");
+// 						tr.append("<td>" + item.tanggal_mulai + "</td>");
+// 						tr.append("<td>" + item.tanggal_akhir + "</td>");
+// 						tr.append("<td>" + item.status_tahun_pelajaran + "</td>");
+// 					}
+// 					tr.append(
+// 						'<td> <button class="btn btn-primary editBtn" data-method="' +
+// 							table +
+// 							'" data-target="' +
+// 							targetController +
+// 							'" data-id="' +
+// 							item.id +
+// 							'">Edit</button> <button class="btn btn-danger deleteBtn" data-method="' +
+// 							table +
+// 							'" data-target="' +
+// 							targetController +
+// 							'" data-id="' +
+// 							item.id +
+// 							'">Delete</button></td>'
+// 					);
+// 					tableElement.find("tbody").append(tr);
+// 				});
+// 			} else {
+// 				tableElement
+// 					.find("tbody")
+// 					.html('<tr><td colspan="4">' + response.message + "</td></tr>");
+// 			}
+// 		},
+// 	});
+// }
 
+// $(document).on("click", ".saveBtn", function () {
+// 	var targetController = $(this).data("target");
+// 	var targetMethod = $(this).data("method");
+// 	var formData = new FormData($("#form_" + targetMethod)[0]);
+// 	$.ajax({
+// 		url: targetController + "/save_" + targetMethod,
+// 		type: "POST",
+// 		data: formData,
+// 		processData: false,
+// 		contentType: false,
+// 		dataType: "json",
+// 		success: function (response) {
+// 			if (response.status) {
+// 				alert(response.message);
+// 				$("#modal_" + targetMethod).modal("hide");
+// 				tampilkan_table(targetController, targetMethod);
+// 			} else {
+// 				alert(response.message);
+// 			}
+// 		},
+// 	});
+// });
 
-    $('.btn_tambah_biaya').click(function() {
-		$('#id').val('');
-		$('#form_biaya').trigger('reset');
-		$('#modal_biaya').modal('show');
-	});
+// $(document).on("click", ".deleteBtn", function () {
+// 	var targetController = $(this).data("target");
+// 	var targetMethod = $(this).data("method");
+// 	var id = $(this).data("id");
+// 	$.ajax({
+// 		url: targetController + "/delete_" + targetMethod,
+// 		type: "POST",
+// 		data: {
+// 			id: id,
+// 		},
+// 		dataType: "json",
+// 		success: function (response) {
+// 			if (response.status) {
+// 				alert(response.message);
+// 				tampilkan_table(targetController, targetMethod);
+// 			} else {
+// 				alert(response.message);
+// 			}
+// 		},
+// 	});
+// });
+// function setJurusan(id_tahun_pelajaran, id) {
+// 	let url = "kelas/option_jurusan";
+// 	$("#id_jurusan").load(url + "/" + id_tahun_pelajaran, function () {
+// 		$("#id_jurusan").val(id);
+// 	});
+// }
 
-    $('.btn_tambah_harga_biaya').click(function() {
-		$('#id').val('');
-		$('#form_harga_biaya').trigger('reset');
-		$('#modal_harga_biaya').modal('show');
-	});
+// $(document).on("click", ".editBtn", function () {
+// 	let targetController = $(this).data("target");
+// 	let targetMethod = $(this).data("method");
+// 	let id = $(this).data("id");
+// 	let url = targetController + "/edit_" + targetMethod + "/" + id;
 
-	function tampilkan_table(targetController, table){
-		let tableElement = $('#table_' + table);
-		$.ajax({
-			url: '<?php echo base_url(); ?>' + targetController + '/table_' + table,
-			type: 'GET',
-			dataType: 'json',
-			success: function(response){
-				console.log(tableElement);
-				if(response.status){
-					let no = 1;
-					$.each(response.data, function(i, item){
-						let tr = $('<tr>');
-						tr.append('<td>' + no++ + '</td>');
-
-						if(table === 'biaya'){
-							tr.append('<td>' + item.nama_biaya + '</td>');
-							tr.append('<td>' + item.deskripsi + '</td>');
-						} else if(table === 'harga_biaya'){
-							tr.append('<td>' + item.nama_biaya + '</td>');
-							tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-							tr.append('<td>' + item.harga + '</td>');
-						}
-
-						tr.append('<td> <button class="btn btn-primary editBtn" data-method="'+ table +'" data-target="'+ targetController +'" data-id="' + item.id + '">Edit</button> <button class="btn btn-danger deleteBtn" data-method="'+ table +'" data-target="' + targetController + '" data-id="' + item.id + '">Delete</button></td>');
-                    	tableElement.find('tbody').append(tr);
-					});
-				} else {
-                	tableElement.find('tbody').html('<tr><td colspan="4">' + response.message + '</td></tr>');
-            }
-			}
-		})
-	}
-
-    // function tabelBiaya() {
-	// 	let tabelBiaya = $('#tabelBiaya');
-	// 	let tr = $('<tr>');
-	// 	$.ajax({
-	// 		url: '<?php echo base_url('biaya/table_biaya'); ?>',
-	// 		type: 'GET',
-
-	// 		dataType: 'json',
-	// 		success: function(response) {
-	// 			if (response.status) {
-	// 				tabelBiaya.find('tbody').html('');
-	// 				let no = 1;
-	// 				$.each(response.data, function(i, item) {
-	// 					let tr = $('<tr>');
-	// 					tr.append('<td>' + no++ + '</td>');
-	// 					tr.append('<td>' + item.nama_biaya + '</td>');
-	// 					tr.append('<td>' + item.deskripsi + '</td>');
-	// 					tr.append('<td>	<button class="btn btn-primary editBtn" data-target="biaya" (' + item.id + ')">Edit</button> <button class="btn btn-danger deleteBtn" data-target="biaya"(' + item.id + ')">Delete</button></td>');
-	// 					tabelBiaya.find('tbody').append(tr);
-	// 				});
-
-	// 			} else {
-	// 				tabelBiaya.find('tbody').html('');
-	// 				tr.append('<td colspan="4">' + response.message + '</td>');
-	// 			}
-	// 		}
-	// 	});
-	// }
-
-    // function tabelHargaBiaya() {
-	// 	let tabelHargaBiaya = $('#tabel_harga_biaya');
-	// 	let tr = $('<tr>');
-	// 	$.ajax({
-	// 		url: '<?php echo base_url('biaya/table_harga_biaya'); ?>',
-	// 		type: 'GET',
-	// 		dataType: 'json',
-	// 		success: function(response) {
-	// 			if (response.status) {
-	// 				tabelHargaBiaya.find('tbody').html('');
-	// 				let no = 1;
-	// 				$.each(response.data, function(i, item) {
-	// 					let tr = $('<tr>');
-	// 					tr.append('<td>' + no++ + '</td>');
-	// 					tr.append('<td>' + item.nama_biaya + '</td>');
-	// 					tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-	// 					tr.append('<td>' + item.harga + '</td>');
-	// 					tr.append('<td>	<button class="btn btn-primary editBtn" data-target="harga_biaya" (' + item.id + ')">Edit</button> <button class="btn btn-danger deleteBtn" data-target="harga_biaya"(' + item.id + ')">Delete</button></td>');
-	// 					tabelHargaBiaya.find('tbody').append(tr);
-	// 				});
-
-	// 			} else {
-	// 				tabelHargaBiaya.find('tbody').html('');
-	// 				tr.append('<td colspan="4">' + response.message + '</td>');
-	// 			}
-	// 		}
-	// 	});
-	// }
-
-    $(document).on('click', '.saveBtn', function()  {
-		let base = '<?php echo base_url(); ?>';
-		var targetController = $(this).data('target');
-		var targetMethod = $(this).data('method');
-		var url = base + targetController +'/save_' + targetMethod;
-		var formData = new FormData($('#form_' + targetMethod)[0]);
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					$('#modal_' + targetMethod).modal('hide');
-
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	})
-
-	$(document).on('click', '.editBtn', function() {
-		let base = '<?php echo base_url(); ?>';
-		var targetController = $(this).data('target');
-		var targetMethod = $(this).data('method');
-		// var id = $(this).data('id');
-    	var url = base + targetController +'/edit_' + targetMethod;
-		var formData = new FormData($('#form_' + targetMethod)[0]);
-		formData.append('id', $(this).data('id'));
-
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					if(targetMethod === 'biaya'){
-						$('#id').val(response.data.id);
-						$('#nama_biaya').val(response.data.nama_biaya);
-						$('#deskripsi').val(response.data.deskripsi);
-						$('#modal_' + targetMethod).modal('show');
-					} else if (targetMethod === 'harga_biaya'){
-						$('#id').val(response.data.id);
-						$('#id_biaya').val(response.data.id_biaya);
-                        $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
-                        $('#harga').val(response.data.harga);
-						$('#modal_' + targetMethod).modal('show');
-					}
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	});
-
-    // function editBiaya(id){
-	// 		$.ajax({
-	// 			url: '<?php echo base_url('biaya/edit_biaya'); ?>',
-	// 			type: 'POST',
-	// 			data: {
-	// 				id: id
-	// 			},
-	// 			dataType: 'json',
-	// 			success: function(response) {
-	// 				if (response.status) {
-	// 					$('#id').val(response.data.id);
-	// 					$('#nama_biaya').val(response.data.nama_biaya);
-	// 					$('#deskripsi').val(response.data.deskripsi);
-	// 					$('#modal_biaya').modal('show');
-	// 					tabelBiaya();
-	// 				} else {
-	// 					alert(response.message);
-	// 				}
-	// 			}
-	// 		});
-	// }
-    // function editHargaBiaya(id){
-	// 		$.ajax({
-	// 			url: '<?php echo base_url('biaya/edit_harga_biaya'); ?>',
-	// 			type: 'POST',
-				// data: {
-				// 	id: id
-				// },
-	// 			dataType: 'json',
-	// 			success: function(response) {
-	// 				if (response.status) {
-						// $('#id').val(response.data.id);
-						// $('#id_biaya').val(response.data.id_biaya);
-                        // $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
-                        // $('#harga').val(response.data.harga);
-	// 					$('#modal_harga_biaya').modal('show');
-	// 					tabelHargaBiaya();
-	// 				} else {
-	// 					alert(response.message);
-	// 				}
-	// 			}
-	// 		});
-	// }
-
-	$(document).on('click', '.deleteBtn', function() {
-		let base = '<?php echo base_url(); ?>';
-		var targetController = $(this).data('target');
-		var targetMethod = $(this).data('method');
-		var id = $(this).data('id');
-    	var url = base + targetController +'/delete_' + targetMethod;
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: {
-				id: id
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	})
-
-    // $('.deleteBtn').click(function() {
-	// 	if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-	// 		let url = '<?php echo base_url('biaya/delete_biaya'); ?>';
-	// 		$.ajax({
-	// 			url: url,
-	// 			type: 'POST',
-	// 			data: {
-	// 				id: id
-	// 			},
-	// 			dataType: 'json',
-	// 			success: function(response) {
-	// 				if (response.status) {
-	// 					alert(response.message);
-	// 					tabelBiaya();
-	// 				} else {
-	// 					alert(response.message);
-	// 				}
-	// 			}
-	// 		});
-	// 	}
-
-	// });
-    // function deleteHargaBiaya(id) {
-	// 	if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-	// 		let url = '<?php echo base_url('biaya/deleteHargaBiaya'); ?>';
-	// 		$.ajax({
-	// 			url: url,
-	// 			type: 'POST',
-	// 			data: {
-	// 				id: id
-	// 			},
-	// 			dataType: 'json',
-	// 			success: function(response) {
-	// 				if (response.status) {
-	// 					alert(response.message);
-	// 					tabelHargaBiaya();
-	// 				} else {
-	// 					alert(response.message);
-	// 				}
-	// 			}
-	// 		});
-	// 	}
-
-	// }
-
-</script>
+// 	$.ajax({
+// 		url: url,
+// 		type: "POST",
+// 		data: {
+// 			id: id,
+// 		},
+// 		dataType: "json",
+// 		success: function (response) {
+// 			if (response.status) {
+// 				if (targetMethod === "jenis_biaya") {
+// 					$("#form_jenis_biaya #id").val(response.data.id);
+// 					$("#nama_biaya").val(response.data.nama_biaya);
+// 					$("#deskripsi").val(response.data.deskripsi);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				} else if (targetMethod === "harga_biaya") {
+// 					console.log(response.data);
+// 					$("#form_harga_biaya #id").val(response.data.id);
+// 					$("#id_biaya").val(response.data.id_biaya);
+// 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+// 					// $("#id_jurusan").val(response.data.id_jurusan);
+// 					// $("#id_kelas").val(response.data.id_kelas);
+// 					$("#harga").val(response.data.harga);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				} else if (targetMethod === "tahun_pelajaran") {
+// 					$("#id").val(response.data.id);
+// 					$("#nama_tahun_pelajaran").val(response.data.nama_tahun_pelajaran);
+// 					$("#tanggal_mulai").val(response.data.tanggal_mulai);
+// 					$("#tanggal_akhir").val(response.data.tanggal_akhir);
+// 					$("#status_tahun_pelajaran").val(
+// 						response.data.status_tahun_pelajaran
+// 					);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				} else if (targetMethod === "jurusan") {
+// 					$("#id").val(response.data.id);
+// 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+// 					$("#nama_jurusan").val(response.data.nama_jurusan);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				} else if (targetMethod === "kelas") {
+// 					$("#id").val(response.data.id);
+// 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+// 					$("#id_jurusan").val(response.data.id_jurusan);
+// 					$("#nama_kelas").val(response.data.nama_kelas);
+// 					setJurusan(
+// 						response.data.id_tahun_pelajaran,
+// 						response.data.id_jurusan
+// 					);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				} else if (targetMethod === "jenis_seragam") {
+// 					$("#form_jenis_seragam #id").val(response.data.id);
+// 					$("#nama_seragam").val(response.data.nama_seragam);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				} else if (targetMethod === "stok_seragam") {
+// 					$("#form_stok_seragam #id").val(response.data.id);
+// 					$("#id_seragam").val(response.data.id_seragam);
+// 					$("#id_tahun_pelajaran").val(response.data.id_tahun_pelajaran);
+// 					$("#ukuran").val(response.data.ukuran);
+// 					$("#stok").val(response.data.stok);
+// 					$("#modal_" + targetMethod).modal("show");
+// 					tampilkan_table(targetController, targetMethod);
+// 				}
+// 			} else {
+// 				alert(response.message);
+// 			}
+// 		},
+// 	});
+// });

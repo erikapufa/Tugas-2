@@ -1,42 +1,66 @@
 <?php
-defined('BASEPATH') or exit('Akses langsung tidak diperbolehkan');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Login extends CI_Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
-    public function index()
-    {
-        $this->load->view('view_login');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('User_model');
+	}
 
-    public function proses_login()
-    {
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
+	public function index()
+	{
+		$this->load->view('view_login');
+	}
 
-        log_message('debug', 'Proses login dimulai');
-        log_message('debug', 'Username: ' . $username);
-        log_message('debug', 'Password: ' . $password);
+	public function proses_login()
+	{
+		$username = $this->input->post('username');
+		$password = $this->input->post('password');
 
-        // Cek username dan password di database
-        $user = $this->db->where('username', $username)->where('password', $password)->get('user')->row();
+		$this->form_validation->set_rules('username', 'Username', 'trim|required', array('required' => '%s wajib diisi'));
+		$this->form_validation->set_rules('password', 'Password', 'trim|required', array('required' => '%s wajib diisi'));
 
-        if ($user) {
-            // Set session untuk pengguna yang berhasil login
-            $this->session->set_userdata(['user_id' => $user->id]);
-            log_message('debug', 'Login sukses, session user_id diset: ' . $user->id);
+		if ($this->form_validation->run() == FALSE) {
+			$ret['status'] = false;
+			foreach ($_POST as $key => $value) {
+				$ret['error'][$key] = form_error($key);
+			}
+		} else {
+			$q = $this->User_model->login($username, $password);
+			if ($q->num_rows() > 0) {
 
-            // Arahkan ke halaman dashboard
-            redirect('Admin');
-        } else {
-            log_message('debug', 'Login gagal, username atau password salah');
-            $this->session->set_flashdata('error', 'Username atau password salah');
-            redirect('login');
-        }
-    }
+				$sess = array(
+					'is_login' => TRUE,
+					'username' => $q->row()->username
+				);
+
+				$this->session->set_userdata($sess);
+
+				$ret = array(
+					'username' => $username,
+					'password' => $password,
+					'error' => '',
+					'status' => true,
+					'message' => 'Login Berhasil'
+				);
+			} else {
+				$ret = array(
+					'element' => '',
+					'error' => '',
+					'status' => false,
+					'message' => 'Username atau Password Salah'
+				);
+			}
+		}
+
+
+
+
+		echo json_encode($ret);
+	}
 }
-?>
+
+/* End of file: Login.php */
