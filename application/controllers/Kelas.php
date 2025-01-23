@@ -32,28 +32,19 @@ class Kelas extends CI_Controller
         echo $ret;
     }
 
-    public function option_jurusan($id = null)
+    public function option_jurusan()
     {
-        if ($id === null) {
-            echo '<option value="">ID tidak valid</option>';
-            return;
-        }
-
-        // Logika fungsi tetap sama
-        $q = $this->md->getJurusanByTahunPelajaranID($id);
-        $ret = '<option value="">Pilih Jurusan</option>';
-
-        if ($q && $q->num_rows() > 0) {
+        $q = $this->md->getJurusanByTahunPelajaranID();
+        $ret = '<option value="">Pilih Tahun Pelajaran</option>';
+        if ($q->num_rows() > 0) {
             foreach ($q->result() as $row) {
-                $ret .= '<option value="' . htmlspecialchars($row->id) . '">' . htmlspecialchars($row->nama_jurusan) . '</option>';
+                $ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
             }
-        } else {
-            $ret .= '<option value="">Data tidak ditemukan</option>';
         }
-
         echo $ret;
     }
 
+    
 
     public function table_kelas()
     {

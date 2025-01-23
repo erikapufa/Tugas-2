@@ -33,12 +33,13 @@ class Pendaftaran_Awal extends CI_Controller
 
     public function option_jurusan($id = null)
     {
-        $id = $id ?? $this->input->get('id_tahun_pelajaran');
+        // Validasi apakah $id ada
         if (!$id) {
             echo '<option value="">Pilih Jurusan</option>';
             return;
         }
 
+        // Ambil data jurusan berdasarkan ID tahun pelajaran
         $q = $this->md->getJurusanByTahunPelajaranID($id);
         $ret = '<option value="">Pilih Jurusan</option>';
         if ($q->num_rows() > 0) {
@@ -72,7 +73,6 @@ class Pendaftaran_Awal extends CI_Controller
 
     public function table_pendaftaran_awal()
     {
-        // Menggunakan query builder yang lebih terstruktur
         $this->db->select([
             'data_pendaftaran_awal.id',
             'data_pendaftaran_awal.id_tahun_pelajaran',
@@ -80,13 +80,12 @@ class Pendaftaran_Awal extends CI_Controller
             'data_pendaftaran_awal.id_jurusan',
             'jurusan.nama_jurusan',
             'data_pendaftaran_awal.id_kelas',
-            'kelas.nama_kelas'
+            'kelas.nama_kelas',
+            'data_pendaftaran_awal.no_pendaftaran',
         ]);
 
-        // Menentukan tabel utama
         $this->db->from('data_pendaftaran_awal');
 
-        // Melakukan join dengan tabel terkait
         $this->db->join(
             'data_tahun_pelajaran as tahun_pelajaran',
             'data_pendaftaran_awal.id_tahun_pelajaran = tahun_pelajaran.id',
@@ -103,9 +102,8 @@ class Pendaftaran_Awal extends CI_Controller
             'data_kelas as kelas',
             'data_pendaftaran_awal.id_kelas = kelas.id',
             'left'
-        ); // Samakan dengan yang lain
+        ); 
 
-        // Menambahkan kondisi untuk tidak mengambil data yang dihapus
         $this->db->where('data_pendaftaran_awal.deleted_at', 0);
 
         // Eksekusi query
@@ -124,7 +122,8 @@ class Pendaftaran_Awal extends CI_Controller
                     'id_jurusan' => $row->id_jurusan,
                     'nama_jurusan' => $row->nama_jurusan,
                     'id_kelas' => $row->id_kelas,
-                    'nama_kelas' => $row->nama_kelas
+                    'nama_kelas' => $row->nama_kelas,
+                    'no_pendaftaran' => $row->no_pendaftaran,
                 ];
             }
 
@@ -158,7 +157,7 @@ class Pendaftaran_Awal extends CI_Controller
                     'jenis_kelamin' => $row->jenis_kelamin,
                     'tempat_lahir' => $row->tempat_lahir,
                     'tanggal_lahir' => $row->tanggal_lahir,
-                    'alamat_siswa' => $row->alamat_siswa,
+                    // 'alamat_siswa' => $row->alamat_siswa,
                     'no_telepon_siswa' => $row->no_telepon_siswa,
                     'email' => $row->email,
                     'asal_sekolah' => $row->asal_sekolah,
@@ -208,70 +207,141 @@ class Pendaftaran_Awal extends CI_Controller
     }
     public function save_pendaftaran_awal()
     {
-        $id = $this->input->post('id');
-        $data = [
-            // 'no_pendaftaran' => $no_pendaftaran,
-            'id_tahun_pelajaran' => $this->input->post('id_tahun_pelajaran'),
-            'id_jurusan' => $this->input->post('id_jurusan'),
-            'id_kelas' => $this->input->post('id_kelas'),
-            'nama_siswa' => $this->input->post('nama_siswa'),
-            'nik' => $this->input->post('nik'),
-            'agama' => $this->input->post('agama'),
-            'nisn' => $this->input->post('nisn'),
-            'tempat_lahir' => $this->input->post('tempat_lahir'),
-            'tanggal_lahir' => $this->input->post('tanggal_lahir'),
-            'jenis_kelamin' => $this->input->post('jenis_kelamin'),
-            'alamat_siswa' => $this->input->post('alamat_siswa'),
-            'no_telepon_siswa' => $this->input->post('no_telepon_siswa'),
-            'email' => $this->input->post('email'),
-            'asal_sekolah' => $this->input->post('asal_sekolah'),
-            'nama_ibu' => $this->input->post('nama_ibu'),
-            'nama_ayah' => $this->input->post('nama_ayah'),
-            'no_telepon_ayah' => $this->input->post('no_telepon_ayah'),
-            'no_telepon_ibu' => $this->input->post('no_telepon_ibu'),
-            'pekerjaan_ayah' => $this->input->post('pekerjaan_ayah'),
-            'pekerjaan_ibu' => $this->input->post('pekerjaan_ibu'),
-            'nama_wali' => $this->input->post('nama_wali'),
-            'no_telepon_wali' => $this->input->post('no_telepon_wali'),
-            'pekerjaan_wali' => $this->input->post('pekerjaan_wali'),
-            'alamat_orang_tua' => $this->input->post('alamat_orang_tua'),
-            'sumber_informasi' => $this->input->post('sumber_informasi'),
-            'updated_at' => date('Y-m-d H:i:s'),
-            'deleted_at' => 0
-        ];
+        $this->load->library('form_validation');
 
-        if (!$id) {
-            $data['created_at'] = date('Y-m-d H:i:s');
-        }
-        // $data['no_pendaftaran'] = $this->md->generateNomorPendaftaran($data['id_tahun_pelajaran'], $data['id_jurusan']);;
-
+        //Awal Pendaftaran
         $this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'trim|required', array('required' => '%s harus diisi'));
         $this->form_validation->set_rules('id_jurusan', 'Jurusan', 'trim|required', array('required' => '%s harus diisi'));
         $this->form_validation->set_rules('id_kelas', 'Kelas', 'trim|required', array('required' => '%s harus diisi'));
 
-        if ($this->form_validation->run() == FALSE) {
-            $ret['status'] = false;
-            foreach ($_POST as $key => $value) {
-                $ret['error'][$key] = form_error($key);
-            }
-        } else {
-            // Simpan atau update data
-            if ($id) {
-                $update = $this->md->updatePendaftaranAwal($id, $data);
-                $ret = $update ?
-                    ['status' => true, 'message' => 'Data berhasil diupdate'] :
-                    ['status' => false, 'message' => 'Data gagal diupdate'];
-            } else {
-                $insert = $this->md->savePendaftaranAwal($data);
-                $ret = $insert ?
-                    ['status' => true, 'message' => 'Data berhasil disimpan'] :
-                    ['status' => false, 'message' => 'Data gagal disimpan'];
-            }
-        }
+        $this->form_validation->set_rules('nama_siswa', 'Nama', 'trim|required|max_length[40]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 40 karakter'));
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required|numeric|min_length[16]|max_length[16]', array('required' => '%s harus diisi', 'min_length' => 'Tidak boleh kurang dari 16 angka', 'max_length' => 'Tidak boleh lebih dari 16 angka', 'numeric' => 'Hanya boleh mengandung angka'));
+        $this->form_validation->set_rules('agama', 'Agama', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('nisn', 'NISN', 'trim|required|numeric|max_length[10]|min_length[10]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 10 angka', 'min_length' => 'Tidak boleh kurang dari 10 angka', 'numeric' => 'Hanya boleh mengandung angka'));
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('tempat_lahir', 'Tempat Lahir', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal Lahir', 'trim|required|exact_length[10]', array('required' => '%s harus diisi', 'exact_length' => 'Format Salah'));
+        // $this->form_validation->set_rules('alamat', 'Alamat', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('no_telepon_siswa', 'No Telepon', 'trim|required|numeric|max_length[13]|min_length[7]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 13 angka', 'min_length' => 'Tidak boleh kurang dari 7 angka', 'numeric' => 'Hanya boleh mengandung angka'));
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email', array('required' => '%s harus diisi', 'valid_email' => 'format email salah'));
+        $this->form_validation->set_rules('asal_sekolah', 'Asal Sekolah', 'trim|required', array('required' => '%s harus diisi'));
 
-        echo json_encode($ret);
+        $this->form_validation->set_rules('nama_ayah', 'Nama Ayah', 'trim|required|max_length[40]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 40 karakter'));
+        $this->form_validation->set_rules('nama_ibu', 'Nama Ibu', 'trim|required|max_length[40]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 40 karakter'));
+        $this->form_validation->set_rules('no_telepon_ayah', 'No Telepon Ayan', 'trim|required|numeric|max_length[13]|min_length[7]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 13 angka', 'min_length' => 'Tidak boleh kurang dari 7 angka', 'numeric' => 'Hanya boleh mengandung angka'));
+        $this->form_validation->set_rules('no_telepon_ibu', 'No Telepon Ibu', 'trim|required|numeric|max_length[13]|min_length[7]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 13 angka', 'min_length' => 'Tidak boleh kurang dari 7 angka', 'numeric' => 'Hanya boleh mengandung angka'));
+        $this->form_validation->set_rules('pekerjaan_ayah', 'Pekerjaan Ayah', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('pekerjaan_ibu', 'Pekerjaan Ibu', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('nama_wali', 'Nama Wali', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('no_telepon_wali', 'No Telepon Wali', 'trim|required|numeric|max_length[13]|min_length[7]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 13 angka', 'min_length' => 'Tidak boleh kurang dari 7 angka', 'numeric' => 'Hanya boleh mengandung angka'));
+        $this->form_validation->set_rules('pekerjaan_wali', 'Pekerjaan Wali', '', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('alamat_orang_tua', 'Alamat', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('sumber_informasi', 'Sumber Informasi', 'trim|required', array('required' => '%s harus diisi'));
+        
+        if ($this->form_validation->run() == FALSE) {
+            echo json_encode([
+                'status' => false,
+                'error' => $this->form_validation->error_array() // Mengembalikan error dalam format array
+            ]);
+        } else {
+            $id = $this->input->post('id');
+
+            $data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
+            $data['id_jurusan'] = $this->input->post('id_jurusan');
+
+
+            $urutan = $this->md->hitungUrutanPendaftaran($data['id_tahun_pelajaran'], $data['id_jurusan']);
+
+            $no_pendaftaran = $this->md->generate($data['id_jurusan'], $data['id_tahun_pelajaran'], $urutan);
+
+            $data['no_pendaftaran'] = $no_pendaftaran;
+
+            $data['id_kelas'] = $this->input->post('id_kelas');
+		
+
+            $data_siswa = array(
+                'id_tahun_pelajaran' => $this->input->post('id_tahun_pelajaran'),
+                'id_jurusan' => $this->input->post('id_jurusan'),
+                'id_kelas' => $this->input->post('id_kelas'),
+                // 'nama_pendaftaran' => $this->input->post('nama_pendafataran'),
+                'nama_siswa' => $this->input->post('nama_siswa'),
+                'nik' => $this->input->post('nik'),
+                'agama' => $this->input->post('agama'),
+                'nisn' => $this->input->post('nisn'),
+                'jenis_kelamin' => $this->input->post('jenis_kelamin'),
+                'tempat_lahir' => $this->input->post('tempat_lahir'),
+                'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+                // 'alamat_siswa' => $this->input->post('alamat_siswa'),
+                'no_telepon_siswa' => $this->input->post('no_telepon_siswa'),
+                'email' => $this->input->post('email'),
+                'asal_sekolah' => $this->input->post('asal_sekolah'),
+                'updated_at' => date('Y-m-d H:i:s'),
+                'deleted_at' => 0,
+                'nama_ayah' => $this->input->post('nama_ayah'),
+                'nama_ibu' => $this->input->post('nama_ibu'),
+                'no_telepon_ayah' => $this->input->post('no_telepon_ayah'),
+                'no_telepon_ibu' => $this->input->post('no_telepon_ibu'),
+                'pekerjaan_ayah' => $this->input->post('pekerjaan_ayah'),
+                'pekerjaan_ibu' => $this->input->post('pekerjaan_ibu'),
+                'nama_wali' => $this->input->post('nama_wali'),
+                'no_telepon_wali' => $this->input->post('no_telepon_wali'),
+                'pekerjaan_wali' => $this->input->post('pekerjaan_wali'),
+                'alamat_orang_tua' => $this->input->post('alamat_orang_tua'),
+                'sumber_informasi' => $this->input->post('sumber_informasi')
+            );
+
+            // // Cek duplikasi data
+            // if ($this->md->cekPendaftaranAwalDuplicate('email', $email, $id)) {
+            //     echo json_encode(['status' => false, 'message' => 'Email sudah terdaftar.']);
+            //     return;
+            // }
+            // if ($this->md->cekPendaftaranAwalDuplicate('nik', $nik, $id)) {
+            //     echo json_encode(['status' => false, 'message' => 'NIK sudah terdaftar.']);
+            //     return;
+            // }
+            // if ($this->md->cekPendaftaranAwalDuplicate('nisn', $nisn, $id)) {
+            //     echo json_encode(['status' => false, 'message' => 'NISN sudah terdaftar.']);
+            //     return;
+            // }
+
+            if (!empty($id)) {
+                // Jika ada ID, berarti ini adalah update
+                $data_siswa['updated_at'] = date('Y-m-d H:i:s'); // Pastikan waktu update diperbarui
+                $siswa_updated = $this->md->updatePendaftaranAwal($id, $data_siswa);
+                if ($siswa_updated) {
+                    $ret['status'] = true;
+                    $ret['message'] = 'Data berhasil diupdate';
+                } else {
+                    $ret['status'] = false;
+                    $ret['message'] = 'Data gagal diupdate';
+                }
+            } else {
+                // Jika tidak ada ID, berarti ini adalah insert
+                $data_siswa['created_at'] = date('Y-m-d H:i:s'); // Menetapkan waktu pembuatan
+                $id = $this->md->savePendaftaranAwal($data_siswa);
+                if ($id) {
+                    $ret['status'] = true;
+                    $ret['message'] = 'Data berhasil disimpan';
+                } else {
+                    $ret['status'] = false;
+                    $ret['message'] = 'Data gagal disimpan';
+                }
+            }
+
+            echo json_encode($ret);
+        }
     }
 
+    public function validate_date($date)
+    {
+        $date = date_create_from_format('Y-m-d', $date);
+        if ($date) {
+            return true;
+        } else {
+            $this->form_validation->set_message('validate_date', 'Format tanggal tidak valid.');
+            return false;
+        }
+    }
     public function edit_pendaftaran_awal()
     {
         $id = $this->input->post('id');
@@ -313,6 +383,29 @@ class Pendaftaran_Awal extends CI_Controller
         }
         echo json_encode($ret);
     }
+    public function tambah_nama_pendaftaran()
+    {
+        $this->load->model('Masterdata_model', 'md');
 
+        // Contoh input
+        $id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran'); // 2025
+        $id_jurusan = $this->input->post('id_jurusan'); // TI
+
+        // Generate nomor pendaftaran
+        $no_pendaftaran = $this->md->generateNamaPendaftaran($id_tahun_pelajaran, $id_jurusan);
+
+        // Data untuk disimpan
+        $data = [
+            'id_tahun_pelajaran' => $id_tahun_pelajaran,
+            'id_jurusan' => $id_jurusan,
+            'nama_pendaftaran' => $nama_pendaftaran,
+        ];
+
+        // Insert ke database
+        $this->md->insertNamapendaftaran($data);
+
+        // // Redirect atau tampilkan pesan sukses
+        // redirect('pendaftaran/success');
+    }
     
 }
