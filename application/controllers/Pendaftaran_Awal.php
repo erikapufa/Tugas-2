@@ -31,8 +31,14 @@ class Pendaftaran_Awal extends CI_Controller
         echo $ret;
     }
 
-    public function option_jurusan($id)
+    public function option_jurusan($id = null)
     {
+        $id = $id ?? $this->input->get('id_tahun_pelajaran');
+        if (!$id) {
+            echo '<option value="">Pilih Jurusan</option>';
+            return;
+        }
+
         $q = $this->md->getJurusanByTahunPelajaranID($id);
         $ret = '<option value="">Pilih Jurusan</option>';
         if ($q->num_rows() > 0) {
@@ -43,9 +49,16 @@ class Pendaftaran_Awal extends CI_Controller
         echo $ret;
     }
 
-    public function option_kelas($id)
-    {
 
+    public function option_kelas($id = null)
+    {
+        // Validasi apakah $id ada
+        if (!$id) {
+            echo '<option value="">Pilih Kelas</option>';
+            return;
+        }
+
+        // Ambil data kelas berdasarkan ID jurusan
         $q = $this->md->getKelasByJurusanID($id);
         $ret = '<option value="">Pilih Kelas</option>';
         if ($q->num_rows() > 0) {
@@ -55,6 +68,7 @@ class Pendaftaran_Awal extends CI_Controller
         }
         echo $ret;
     }
+
 
     public function table_pendaftaran_awal()
     {
@@ -194,15 +208,7 @@ class Pendaftaran_Awal extends CI_Controller
     }
     public function save_pendaftaran_awal()
     {
-
         $id = $this->input->post('id');
-        // Ambil id_jurusan dari input form
-        $id_jurusan = $this->input->post('id_jurusan');
-
-        // // Panggil model untuk generate no_pendaftaran
-        // $this->load->model('Masterdata_model', 'md');
-        // $no_pendaftaran = $this->md->generateNomorPendaftaran($id_jurusan);
-
         $data = [
             // 'no_pendaftaran' => $no_pendaftaran,
             'id_tahun_pelajaran' => $this->input->post('id_tahun_pelajaran'),
@@ -237,14 +243,17 @@ class Pendaftaran_Awal extends CI_Controller
         if (!$id) {
             $data['created_at'] = date('Y-m-d H:i:s');
         }
+        // $data['no_pendaftaran'] = $this->md->generateNomorPendaftaran($data['id_tahun_pelajaran'], $data['id_jurusan']);;
 
-        // Cek duplikasi berdasarkan no_pendaftaran
-        $cek = $this->md->cekPendaftaranAwalDuplicate($data['no_pendaftaran'], $id);
-        if ($cek->num_rows() > 0) {
-            $ret = [
-                'status' => false,
-                'message' => 'Pendaftar sudah ada'
-            ];
+        $this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('id_jurusan', 'Jurusan', 'trim|required', array('required' => '%s harus diisi'));
+        $this->form_validation->set_rules('id_kelas', 'Kelas', 'trim|required', array('required' => '%s harus diisi'));
+
+        if ($this->form_validation->run() == FALSE) {
+            $ret['status'] = false;
+            foreach ($_POST as $key => $value) {
+                $ret['error'][$key] = form_error($key);
+            }
         } else {
             // Simpan atau update data
             if ($id) {

@@ -183,12 +183,12 @@ $(document).on("click", ".deleteBtn", function () {
 	});
 });
 
-function setJurusan(id_tahun_pelajaran, id) {
-	let url = "kelas/option_jurusan";
-	$("#id_jurusan").load(url + "/" + id_tahun_pelajaran, function () {
-		$("#id_jurusan").val(id);
-	});
-}
+// function setJurusan(id_tahun_pelajaran, id) {
+// 	let url = "kelas/option_jurusan";
+// 	$("#id_jurusan").load(url + "/" + id_tahun_pelajaran, function () {
+// 		$("#id_jurusan").val(id);
+// 	});
+// }
 
 $(document).on("click", "#logoutBtn", function () {
 	if (confirm("Apakah Anda yakin ingin keluar?")) {

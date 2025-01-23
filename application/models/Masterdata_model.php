@@ -409,52 +409,11 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	// public function generateNomorPendaftaran($tahun_pelajaran, $jurusan)
-	// {
-	// 	// Hitung jumlah pendaftaran berdasarkan tahun pelajaran dan jurusan
-	// 	$count = $this->db->where('id_tahun_pelajaran', $tahun_pelajaran)
-	// 		->where('id_jurusan', $jurusan)
-	// 		->count_all_results($this->tablePendaftaranAwal) + 1;
-
-	// 	// Format nomor pendaftaran: YYYYMMDD-JURUSAN-XXXX (e.g. 20250123-MTK-0001)
-	// 	return sprintf('%s-%s-%04d', str_replace('/', '', $tahun_pelajaran), strtoupper($jurusan), $count);
-	// }
+	public function savePendaftaranAwal($data)
+	{
+		return $this->db->insert($this->tablePendaftaranAwal, $data);
+	}
 
 
 
-
-	// // orang tua
-	// public function getAllOrangTua()
-	// {
-	// 	return  $this->db->get($this->tableOrangTua);
-	// }
-
-	// public function getAllOrangTuaNotDeleted()
-	// {
-	// 	$this->db->where('deleted_at', 0);
-	// 	return  $this->db->get($this->tableOrangTua);
-	// }
-
-	// public function getOrangTuaByID($id)
-	// {
-	// 	return $this->db->where('id', $id)->get($this->tableOrangTua);
-	// }
-
-
-	// // siswa
-	// public function getAllSiswa()
-	// {
-	// 	return  $this->db->get($this->tableSiswa);
-	// }
-
-	// public function getAllSiswaNotDeleted()
-	// {
-	// 	$this->db->where('deleted_at', 0);
-	// 	return  $this->db->get($this->tableSiswa);
-	// }
-
-	// public function getSiswaByID($id)
-	// {
-	// 	return $this->db->where('id', $id)->get($this->tableSiswa);
-	// }
 }
