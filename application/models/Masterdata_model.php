@@ -11,9 +11,10 @@ class Masterdata_model extends CI_Model
 	protected $tableHargaBiaya = 'data_harga_biaya';
 	protected $tableSeragam = 'data_seragam';
 	protected $tableStok = 'data_stok';
-
 	protected $table = 'user';
-
+	protected $tablePendaftaranAwal = 'data_pendaftaran_awal';
+	// protected $tableOrangTua = 'data_orang_tua';
+	// protected $tableSiswa = 'data_siswa';
 	public function __construct()
 	{
 		parent::__construct();
@@ -141,7 +142,12 @@ class Masterdata_model extends CI_Model
 		$this->db->where('id_tahun_pelajaran', $id);
 		return $this->db->get($this->tableJurusan);
 	}
-
+	public function getKelasByTahunPelajaranID($id)
+	{
+		$this->db->where($this->tableKelas . '.deleted_at', 0);
+		$this->db->where('id_tahun_pelajaran', $id);
+		return $this->db->get($this->tableKelas);
+	}
 	public function cekKelasDuplicate($nama_kelas,  $id_jurusan, $id){
 		if ($id) {
 			$this->db->where('id !=', $id);
@@ -151,6 +157,7 @@ class Masterdata_model extends CI_Model
 		$this->db->where('deleted_at', 0);
 		return $this->db->get($this->tableKelas);
 	}
+
 
 	public function updateKelas($id, $data)
 	{
@@ -208,6 +215,7 @@ class Masterdata_model extends CI_Model
 		$this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
 		return $this->db->get($this->tableHargaBiaya);
 	}
+
 
 	public function cekHargaBiayaDuplicate($id_biaya, $id_tahun_pelajaran, $id){
 		if ($id) {
@@ -350,7 +358,103 @@ class Masterdata_model extends CI_Model
 		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
 	}
+
+
+	// pendaftaran awal
+	public function getAllPendaftaranAwal()
+	{
+		$this->db->where('deleted_at', 0);
+		return  $this->db->get($this->tablePendaftaranAwal);
+	}
+
+	public function getAllPendaftaranAwalNotDeleted()
+	{
+		$this->db->select($this->tablePendaftaranAwal . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan .'.nama_jurusan,' . $this->tableKelas . '.nama_kelas');
+		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tablePendaftaranAwal . '.id_jurusan');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tablePendaftaranAwal . '.id_kelas');
+		$this->db->where($this->tablePendaftaranAwal . '.deleted_at', 0);
+		return $this->db->get($this->tablePendaftaranAwal);
+	}
+
+	public function getPendaftaranAwalByID($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->get($this->tablePendaftaranAwal);
+	}
+
+	public function getKelasByJurusanID($id)
+	{
+		$this->db->where('deleted_at', 0);
+		$this->db->where('id_jurusan', $id);
+		return $this->db->get($this->tableKelas);
+	}
 	
 
+	public function cekPendaftaranAwalDuplicate($no_pendaftaran, $id)
+	{
+		if ($id) {
+			$this->db->where('id !=', $id);
+		}
+		$this->db->where('no_pendaftaran', $no_pendaftaran);
+		$this->db->where('deleted_at', 0);
+		return $this->db->get($this->tablePendaftaranAwal);
+	}
 
+
+	public function updatePendaftaranAwal($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update($this->tablePendaftaranAwal, $data);
+		return $this->db->affected_rows();
+	}
+
+	// public function generateNomorPendaftaran($tahun_pelajaran, $jurusan)
+	// {
+	// 	// Hitung jumlah pendaftaran berdasarkan tahun pelajaran dan jurusan
+	// 	$count = $this->db->where('id_tahun_pelajaran', $tahun_pelajaran)
+	// 		->where('id_jurusan', $jurusan)
+	// 		->count_all_results($this->tablePendaftaranAwal) + 1;
+
+	// 	// Format nomor pendaftaran: YYYYMMDD-JURUSAN-XXXX (e.g. 20250123-MTK-0001)
+	// 	return sprintf('%s-%s-%04d', str_replace('/', '', $tahun_pelajaran), strtoupper($jurusan), $count);
+	// }
+
+
+
+
+	// // orang tua
+	// public function getAllOrangTua()
+	// {
+	// 	return  $this->db->get($this->tableOrangTua);
+	// }
+
+	// public function getAllOrangTuaNotDeleted()
+	// {
+	// 	$this->db->where('deleted_at', 0);
+	// 	return  $this->db->get($this->tableOrangTua);
+	// }
+
+	// public function getOrangTuaByID($id)
+	// {
+	// 	return $this->db->where('id', $id)->get($this->tableOrangTua);
+	// }
+
+
+	// // siswa
+	// public function getAllSiswa()
+	// {
+	// 	return  $this->db->get($this->tableSiswa);
+	// }
+
+	// public function getAllSiswaNotDeleted()
+	// {
+	// 	$this->db->where('deleted_at', 0);
+	// 	return  $this->db->get($this->tableSiswa);
+	// }
+
+	// public function getSiswaByID($id)
+	// {
+	// 	return $this->db->where('id', $id)->get($this->tableSiswa);
+	// }
 }
